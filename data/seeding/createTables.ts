@@ -29,7 +29,6 @@ export const createTables = () => {
       return db.query(`CREATE TABLE users (
           user_id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
-          avatar_img TEXT,
           email VARCHAR(255) NOT NULL UNIQUE,
           password VARCHAR(255),
           number VARCHAR(255) NOT NULL,

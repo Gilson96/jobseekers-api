@@ -78,7 +78,6 @@ export const seed = ({
             const formatUser = users.map((user) => {
                 return [
                     user.name,
-                    user.avatar_img,
                     user.email,
                     user.password,
                     user.number,
@@ -88,7 +87,7 @@ export const seed = ({
             });
 
             const insertIntoUser = format(
-                `INSERT INTO users (name,avatar_img,email,password,number,address,cv) VALUES %L RETURNING*;`,
+                `INSERT INTO users (name,email,password,number,address,cv) VALUES %L RETURNING*;`,
                 formatUser
             );
 

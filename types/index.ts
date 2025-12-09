@@ -1,5 +1,5 @@
 export type Company = {
-    company_id?: number
+    company_id?: string | number
     company_name?: string
 }
 
@@ -20,15 +20,14 @@ export type Job = {
 }
 
 export type User = {
-    user_id?: number,
+    user_id?: number | string,
     name?: string,
-    avatar_img?: string,
+    avatar_img?: string | null,
     email?: string,
     password?: string,
     number?: string,
     address?: string,
     cv?: string
-    saved_job?: Job[]
 }
 
 export type Application = {
