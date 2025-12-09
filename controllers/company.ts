@@ -10,7 +10,7 @@ import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 
 export const createCompany = (req: Request, res: Response) => {
-    const { company_name } = req.body;
+    const { company_name }: { company_name: string } = req.body;
     const field = Object.keys(req.body)[0]!;
 
     if (company_name === undefined) {
@@ -39,7 +39,7 @@ export const findAllCompanies = (req: Request, res: Response) => {
 };
 
 export const findIdCompany = (req: Request, res: Response) => {
-    const company_id = req.params.company_id!;
+    const company_id = req.params.company_id!
     const field = Object.keys(req.params)[0]!;
 
     return checkIfExists('company', field, company_id).then((result) => {
@@ -55,7 +55,7 @@ export const findIdCompany = (req: Request, res: Response) => {
 
 export const updateCompany = (req: Request, res: Response) => {
     const company_id = req.params.company_id!;
-    const { company_name } = req.body;
+    const { company_name }: { company_name: string } = req.body;
     const field = Object.keys(req.params)[0]!;
 
     if (company_name === undefined) {
@@ -82,10 +82,6 @@ export const updateCompany = (req: Request, res: Response) => {
 export const deleteCompany = (req: Request, res: Response) => {
     const company_id = req.params.company_id!;
     const field = Object.keys(req.params)[0]!;
-
-    if (company_id === undefined) {
-        return res.status(400).send({ msg: "Invalid company Id" });
-    }
 
     return checkIfExists('company', field, company_id).then((result) => {
         if (!result) {

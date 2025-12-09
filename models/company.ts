@@ -1,16 +1,17 @@
 import { format } from "node-pg-format"
 import db from "../data/connection.js";
+import type { Company } from "../types/index.js";
 
-export const create = (name: string) => {
+export const create = (company_name: string) => {
     return db
-        .query(`INSERT INTO company (company_name) VALUES($1) RETURNING *;`, [name])
-        .then(({ rows }) => {
+        .query(`INSERT INTO company (company_name) VALUES($1) RETURNING *;`, [company_name])
+        .then(({ rows }: { rows: Company[] }) => {
             return rows;
         });
 };
 
 export const findAll = () => {
-    return db.query(`SELECT * FROM company;`).then(({ rows }) => {
+    return db.query(`SELECT * FROM company;`).then(({ rows }: { rows: Company[] }) => {
         return rows;
     });
 };
@@ -18,7 +19,7 @@ export const findAll = () => {
 export const findId = (company_id: number) => {
     return db
         .query(`SELECT * FROM company WHERE company.company_id = $1;`, [company_id])
-        .then(({ rows }) => {
+        .then(({ rows }: { rows: Company[] }) => {
             return rows;
         });
 };
@@ -29,7 +30,7 @@ export const update = (company_name: string, company_id: number) => {
             `UPDATE company SET company_name = COALESCE($1, company_name) WHERE company_id = $2 RETURNING *;`,
             [company_name, company_id]
         )
-        .then(({ rows }) => {
+        .then(({ rows }: { rows: Company[] }) => {
             return rows;
         });
 };
@@ -37,7 +38,7 @@ export const update = (company_name: string, company_id: number) => {
 export const deleteId = (company_id: number) => {
     return db
         .query(`DELETE FROM company WHERE company.company_id = $1;`, [company_id])
-        .then(({ rows }) => {
+        .then(({ rows }: { rows: Company[] }) => {
             return rows;
         });
 };
