@@ -32,68 +32,68 @@ export const createCompany = (req: Request, res: Response) => {
     })
 };
 
-// exports.findAllCompanies = (req, res) => {
-//     return findAll().then((companies) => {
-//         return res.status(200).send(companies);
-//     });
-// };
+export const findAllCompanies = (req: Request, res: Response) => {
+    return findAll().then((companies: Company[]) => {
+        return res.status(200).send(companies);
+    });
+};
 
-// exports.findIdCompany = (req, res) => {
-//     const company_id = req.params.company_id;
-//     const field = Object.keys(req.params)[0];
+export const findIdCompany = (req: Request, res: Response) => {
+    const company_id = req.params.company_id!;
+    const field = Object.keys(req.params)[0]!;
 
-//     return checkIfCompanyExists(field, company_id).then((result) => {
-//         if (!result) {
-//             return res.status(404).send({ msg: "Company does not exists" });
-//         } else {
-//             return findId(company_id).then((company) => {
-//                 return res.status(200).send({ company: company[0] });
-//             });
-//         }
-//     });
-// };
+    return checkIfExists('company', field, company_id).then((result) => {
+        if (!result) {
+            return res.status(404).send({ msg: "Company not found" });
+        } else {
+            return findId(Number(company_id)).then((company: Company[]) => {
+                return res.status(200).send({ company: company[0] });
+            });
+        }
+    });
+};
 
-// exports.updateCompany = (req, res) => {
-//     const company_id = req.params.company_id;
-//     const { company_name } = req.body;
-//     const fieldToCheckIfCompanyExists = Object.keys(req.params)[0];
+export const updateCompany = (req: Request, res: Response) => {
+    const company_id = req.params.company_id!;
+    const { company_name } = req.body;
+    const field = Object.keys(req.params)[0]!;
 
-//     if (company_name === undefined) {
-//         return res.status(400).send({ msg: "invalid company field" });
-//     }
+    if (company_name === undefined) {
+        return res.status(400).send({ msg: "Invalid field" });
+    }
 
-//     if (typeof company_name !== "string") {
-//         return res.status(400).send({ msg: "Invalid value" });
-//     }
+    if (typeof company_name !== "string") {
+        return res.status(400).send({ msg: "Invalid value" });
+    }
 
-//     return checkIfCompanyExists(fieldToCheckIfCompanyExists, company_id).then(
-//         (result) => {
-//             if (!result) {
-//                 return res.status(404).send({ msg: "Company does not exists" });
-//             } else {
-//                 return update(company_name, company_id).then((company) => {
-//                     return res.status(200).send({ company: company[0] });
-//                 });
-//             }
-//         }
-//     );
-// };
+    return checkIfExists('company', field, company_id).then(
+        (result) => {
+            if (!result) {
+                return res.status(404).send({ msg: "Company not found" });
+            } else {
+                return update(company_name, Number(company_id)).then((company) => {
+                    return res.status(200).send({ company: company[0] });
+                });
+            }
+        }
+    );
+};
 
-// exports.deleteCompany = (req, res) => {
-//     const company_id = req.params.company_id;
-//     const field = Object.keys(req.params)[0];
+export const deleteCompany = (req: Request, res: Response) => {
+    const company_id = req.params.company_id!;
+    const field = Object.keys(req.params)[0]!;
 
-//     if (company_id === undefined) {
-//         return res.status(400).send({ msg: "Invalid company Id" });
-//     }
+    if (company_id === undefined) {
+        return res.status(400).send({ msg: "Invalid company Id" });
+    }
 
-//     return checkIfCompanyExists(field, company_id).then((result) => {
-//         if (!result) {
-//             return res.status(404).send({ msg: "Company does not exists" });
-//         } else {
-//             return deleteId(company_id).then((company) => {
-//                 return res.status(204).send({ company: company[0] });
-//             });
-//         }
-//     });
-// };
+    return checkIfExists('company', field, company_id).then((result) => {
+        if (!result) {
+            return res.status(404).send({ msg: "Company not found" });
+        } else {
+            return deleteId(Number(company_id)).then((company) => {
+                return res.status(204).send({ company: company[0] });
+            });
+        }
+    });
+};
