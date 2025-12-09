@@ -4,7 +4,7 @@ import { seed } from "../data/seeding/seed.js";
 import { data } from "../data/index.js"
 import request from "supertest"
 import app from "../app.js";
-import type { Company, User } from "../types/index.ts";
+import type { User } from "../types/index.ts";
 
 beforeEach(() => {
     return seed(data);
@@ -115,7 +115,7 @@ describe("PATCH /api/users/:user_id", () => {
                 expect(body.msg).toBe("User not found");
             })
     })
-    it("should respond with a 200 with an object containing the updated company", () => {
+    it("should respond with a 200 with an object containing the updated user", () => {
         const updatedUser = {
             name: 'Gilson',
             address: 'address',
