@@ -9,14 +9,14 @@ export type Skills = {
 }
 
 export type Job = {
-    job_id?: number,
+    job_id?: number | string,
     title?: string,
     location?: string,
     company_name?: string
     pay?: string,
     type?: string,
     company_id?: number,
-    description?: { about_us: string; job_details: string; requirements: string; shift_pattern: string; },
+    description?: string,
 }
 
 export type User = {
