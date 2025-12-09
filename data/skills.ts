@@ -1,4 +1,4 @@
-export const skillsData = [
+export const skills = [
   { skills_name: "Customer Service" },
   { skills_name: "Communication" },
   { skills_name: "Teamwork" },

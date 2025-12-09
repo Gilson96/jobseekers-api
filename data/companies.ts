@@ -1,4 +1,4 @@
-export const companyData = [
+export const companies = [
     { company_name: "TalentBridge Solutions" },
     { company_name: "ElevateHire Group" },
     { company_name: "NextStep Recruiting" },

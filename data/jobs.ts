@@ -1,4 +1,4 @@
-export const jobData = [
+export const jobs = [
     {
         title: "Warehouse Operative",
         location: "Trafford Park Industrial Estate, Manchester M17 1AY, UK",
