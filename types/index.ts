@@ -66,3 +66,9 @@ export type Saved_job = {
     saved_job_user?: number,
     saved_job_job?: number,
 }
+
+export type ErrorHandler = {
+    code: string
+    status: number,
+    msg: string
+}
