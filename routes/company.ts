@@ -3,6 +3,6 @@ import express from 'express'
 
 const companyRouter = express.Router()
 
-companyRouter.post("/company", createCompany)
+companyRouter.post("/", createCompany)
 
 export default companyRouter

@@ -5,12 +5,13 @@ import {
     update,
     deleteId,
 } from "../models/company.js"
+import type { Company } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 
 export const createCompany = (req: Request, res: Response) => {
     const { company_name } = req.body;
-    const field = Object.keys(req.body)[0];
+    const field = Object.keys(req.body)[0]!;
 
     if (company_name === undefined) {
         return res.status(400).send({ msg: "invalid company field" });
@@ -18,17 +19,17 @@ export const createCompany = (req: Request, res: Response) => {
 
     if (typeof company_name !== "string") {
         return res.status(400).send({ msg: "Must have a string value" });
-    }   
+    }
 
-    // return checkIfCompanyExists(field, company_name).then((result) => {
-    //     if (result) {
-    //         return res.status(400).send({ msg: "Company name already exists" });
-    //     } else {
-    //         return create(company_name).then((company) => {
-    //             return res.status(201).send({ company: company[0] });
-    //         });
-    //     }
-    // });
+    return checkIfExists('company', field, company_name).then((result) => {
+        if (result) {
+            return res.status(400).send({ msg: "Company name already exists" })
+        } else {
+            return create(company_name).then((company: Company[]) => {
+                return res.status(201).send({ company: company[0] })
+            })
+        }
+    })
 };
 
 // exports.findAllCompanies = (req, res) => {
