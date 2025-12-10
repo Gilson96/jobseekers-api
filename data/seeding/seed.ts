@@ -155,7 +155,7 @@ export const seed = ({
         })
 
         const insertIntoSaved_job = format(
-            `INSERT INTO saved_job(saved_job_user,saved_job_job) VALUES %L RETURNING*;`,
+            `INSERT INTO saved_job(user_id,job_id) VALUES %L RETURNING*;`,
             formatSaved_job
         );
 

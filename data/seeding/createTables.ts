@@ -73,8 +73,8 @@ export const createTables = () => {
     }).then(() => {
       return db.query(`CREATE TABLE saved_job (
         saved_job_id SERIAL PRIMARY KEY,
-        saved_job_user INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-        saved_job_job INTEGER REFERENCES job(job_id) ON DELETE CASCADE
+        user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+        job_id INTEGER REFERENCES job(job_id) ON DELETE CASCADE
         );`)
     })
 }
