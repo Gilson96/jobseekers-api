@@ -62,8 +62,8 @@ export type Application_job = {
 
 export type Saved_job = {
     saved_job_id?: number,
-    saved_job_user?: number,
-    saved_job_job?: number,
+    user_id?: number,
+    job_id?: number,
 }
 
 export type ErrorHandler = {
