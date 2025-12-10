@@ -23,7 +23,7 @@ describe("checks if attempting to access a non-existent endpoint", () => {
 describe("GET /api/users/:user_id", () => {
     it("should respond with 400 when invalid params", () => {
         return request(app)
-            .get('/api/users/not-valid')
+            .get('/api/user/not-valid')
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).toBe("Invalid params");
@@ -31,7 +31,7 @@ describe("GET /api/users/:user_id", () => {
     })
     it("should respond with 404 when user id not found", () => {
         return request(app)
-            .get('/api/users/999')
+            .get('/api/user/999')
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe("User not found");
@@ -39,7 +39,7 @@ describe("GET /api/users/:user_id", () => {
     })
     it("should respond with 200 and an object containing a user", () => {
         return request(app)
-            .get('/api/users/1')
+            .get('/api/user/1')
             .expect(200)
             .then(({ body }) => {
                 const { user }: { user: User } = body;
@@ -62,7 +62,7 @@ describe("GET /api/users/:user_id", () => {
     })
 })
 
-describe("PATCH /api/users/:user_id", () => {
+describe("PATCH /api/user/:user_id", () => {
     it("should respond with 400 when invalid params", () => {
         const updatedUser = {
             name: 'Gilson',
@@ -70,7 +70,7 @@ describe("PATCH /api/users/:user_id", () => {
             password: 'password',
         }
         return request(app)
-            .patch('/api/users/not-valid')
+            .patch('/api/user/not-valid')
             .send(updatedUser)
             .expect(400)
             .then(({ body }) => {
@@ -83,7 +83,7 @@ describe("PATCH /api/users/:user_id", () => {
             address: 'address',
         }
         return request(app)
-            .patch('/api/users/1')
+            .patch('/api/user/1')
             .send(updatedUser)
             .expect(400)
             .then(({ body }) => {
@@ -96,7 +96,7 @@ describe("PATCH /api/users/:user_id", () => {
             address: 'address'
         }
         return request(app)
-            .patch('/api/users/1')
+            .patch('/api/user/1')
             .send(updatedUser)
             .expect(400)
             .then(({ body }) => {
@@ -108,7 +108,7 @@ describe("PATCH /api/users/:user_id", () => {
             address: "new title"
         }
         return request(app)
-            .patch('/api/users/999')
+            .patch('/api/user/999')
             .send(updatedUser)
             .expect(404)
             .then(({ body }) => {
@@ -125,7 +125,7 @@ describe("PATCH /api/users/:user_id", () => {
             password: 'password',
         }
         return request(app)
-            .patch('/api/users/1')
+            .patch('/api/user/1')
             .send(updatedUser)
             .expect(200)
             .then(({ body }) => {
@@ -149,7 +149,7 @@ describe("PATCH /api/users/:user_id", () => {
     })
 })
 
-describe("POST /api/users", () => {
+describe("POST /api/user", () => {
     it("should responds with a 400 satus code when the field is invalid", () => {
         const newUser = {
             name: 'Gilson',
@@ -161,7 +161,7 @@ describe("POST /api/users", () => {
             cv: 'cv'
         }
         return request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send(newUser)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -177,7 +177,7 @@ describe("POST /api/users", () => {
             cv: 'cv'
         }
         return request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send(newUser)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -192,7 +192,7 @@ describe("POST /api/users", () => {
             cv: 'cv'
         }
         return request(app)
-            .post('/api/users')
+            .post('/api/user')
             .send(newUser)
             .expect(201)
             .then(({ body }) => {
@@ -216,10 +216,10 @@ describe("POST /api/users", () => {
     })
 })
 
-describe("DELETE /api/users", () => {
+describe("DELETE /api/user", () => {
     it("should respond with 400 when invalid params", () => {
         return request(app)
-            .delete('/api/users/not-valid')
+            .delete('/api/user/not-valid')
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).toBe("Invalid params");
@@ -227,14 +227,14 @@ describe("DELETE /api/users", () => {
     })
     it("should respond with 404 when user id not found", () => {
         return request(app)
-            .delete('/api/users/999')
+            .delete('/api/user/999')
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe("User not found");
             })
     })
     it("should respond with a 204 when user deleted", () => {
-        return request(app).delete('/api/users/1').expect(204)
+        return request(app).delete('/api/user/1').expect(204)
     })
 
 })
