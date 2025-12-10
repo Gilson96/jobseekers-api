@@ -4,6 +4,8 @@ import { handleCustomError, handlePsqlError, handleSeverError } from './middlewa
 import usersRouter from './routes/users.js'
 import jobRouter from './routes/job.js'
 import skillsRouter from './routes/skills.js'
+import applicationRouter from './routes/application.js'
+import applicationUserRouter from './routes/applicationUser.js'
 
 const app = express()
 
@@ -13,9 +15,12 @@ const apiRouter = express.Router()
 
 app.use("/api", apiRouter)
 apiRouter.use("/company", companyRouter)
-apiRouter.use("/users", usersRouter)
+apiRouter.use("/user", usersRouter)
 apiRouter.use("/job", jobRouter)
 apiRouter.use("/skills", skillsRouter)
+apiRouter.use("/application", applicationRouter)
+apiRouter.use("/user/application_user", applicationUserRouter)
+
 app.use(handlePsqlError);
 app.use(handleCustomError);
 app.use(handleSeverError);
