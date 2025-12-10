@@ -141,7 +141,7 @@ describe("POST /api/company", () => {
       .send(newCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid company field");
+        expect(body.msg).toBe("Invalid field");
       })
   })
   it("should responds with a 400 satus code when the value is invalid", () => {
@@ -153,7 +153,7 @@ describe("POST /api/company", () => {
       .send(newCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Must have a string value");
+        expect(body.msg).toBe("Invalid value");
       })
   })
 
