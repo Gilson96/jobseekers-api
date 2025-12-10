@@ -3,9 +3,9 @@ import { createJob, deleteJob, findAllJobs, findJobById, updateJob } from '../co
 
 const jobRouter = express.Router()
 
-jobRouter.post("/", createJob)
 jobRouter.get("/", findAllJobs)
 jobRouter.get("/:job_id", findJobById)
+jobRouter.post("/", createJob)
 jobRouter.patch("/:job_id", updateJob)
 jobRouter.delete("/:job_id", deleteJob)
 

@@ -14,11 +14,11 @@ export const createCompany = (req: Request, res: Response) => {
     const field = Object.keys(req.body)[0]!;
 
     if (company_name === undefined) {
-        return res.status(400).send({ msg: "invalid company field" });
+        return res.status(400).send({ msg: "Invalid field" });
     }
 
     if (typeof company_name !== "string") {
-        return res.status(400).send({ msg: "Must have a string value" });
+        return res.status(400).send({ msg: "Invalid value" });
     }
 
     return checkIfExists('company', field, company_name).then((result) => {

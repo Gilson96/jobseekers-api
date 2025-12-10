@@ -3,8 +3,8 @@ import { createUser, deleteUser, findIdUser, updateUser } from "../controllers/u
 
 const usersRouter = express.Router()
 
-usersRouter.post("/", createUser)
 usersRouter.get("/:user_id", findIdUser)
+usersRouter.post("/", createUser)
 usersRouter.patch("/:user_id", updateUser)
 usersRouter.delete("/:user_id", deleteUser)
 
