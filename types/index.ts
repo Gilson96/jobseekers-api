@@ -1,6 +1,7 @@
 export type Company = {
     company_id?: string | number
     company_name?: string
+    rows?: Company[] 
 }
 
 export type Skills = {

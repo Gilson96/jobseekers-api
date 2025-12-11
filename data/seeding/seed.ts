@@ -79,7 +79,6 @@ export const seed = ({
                 return [
                     user.name,
                     user.email,
-                    user.password,
                     user.number,
                     user.address,
                     user.cv,
@@ -87,7 +86,7 @@ export const seed = ({
             });
 
             const insertIntoUser = format(
-                `INSERT INTO users (name,email,password,number,address,cv) VALUES %L RETURNING*;`,
+                `INSERT INTO users (name,email,number,address,cv) VALUES %L RETURNING*;`,
                 formatUser
             );
 
@@ -151,7 +150,7 @@ export const seed = ({
         });
     }).then(() => {
         const formatSaved_job = saved_jobs.map((saved_jobs) => {
-            return [saved_jobs.saved_job_user, saved_jobs.saved_job_job]
+            return [saved_jobs.user_id, saved_jobs.job_id]
         })
 
         const insertIntoSaved_job = format(

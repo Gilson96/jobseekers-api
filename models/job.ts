@@ -1,5 +1,6 @@
 import type { Job } from "../types/index.js";
 import db from '../data/connection.js'
+import { format } from "node-pg-format";
 
 export const create = ({ title, location, pay, type, company_id, description }: Job) => {
     return db
@@ -50,3 +51,12 @@ export const deleteId = (job_id: number) => {
             return rows;
         });
 };
+
+// export const search = (title: string) => {
+//     const findJob = format(`SELECT job_id, title FROM job WHERE title ILIKE '%${job_title}%';`)
+
+//     return db.query(findSkills).then(({ rows }) => {
+//         console.log(rows)
+//         return rows
+//     })
+// };

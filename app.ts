@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import companyRouter from './routes/company.js'
 import { handleCustomError, handlePsqlError, handleSeverError } from './middleware/errorHandlers.js'
 import usersRouter from './routes/users.js'
@@ -12,7 +13,7 @@ import skillsJobRouter from './routes/skillsJob.js'
 import savedJobRouter from './routes/saved_job.js'
 
 const app = express()
-
+app.use(cors());
 app.use(express.json())
 
 const apiRouter = express.Router()

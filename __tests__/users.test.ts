@@ -46,7 +46,6 @@ describe("GET /api/users/:user_id", () => {
                 expect(user).toHaveProperty("user_id");
                 expect(user).toHaveProperty("name");
                 expect(user).toHaveProperty("email");
-                expect(user).toHaveProperty("password");
                 expect(user).toHaveProperty("number");
                 expect(user).toHaveProperty("address");
                 expect(user).toHaveProperty("cv");
@@ -54,7 +53,6 @@ describe("GET /api/users/:user_id", () => {
                 expect(typeof user.user_id).toBe("number");
                 expect(typeof user.name).toBe("string");
                 expect(typeof user.email).toBe("string");
-                expect(typeof user.password).toBe("string");
                 expect(typeof user.number).toBe("string");
                 expect(typeof user.address).toBe("string");
                 expect(typeof user.cv).toBe("string");
@@ -67,7 +65,6 @@ describe("PATCH /api/user/:user_id", () => {
         const updatedUser = {
             name: 'Gilson',
             address: 'address',
-            password: 'password',
         }
         return request(app)
             .patch('/api/user/not-valid')
@@ -122,7 +119,6 @@ describe("PATCH /api/user/:user_id", () => {
             cv: 'cv',
             email: 'email',
             number: 'number',
-            password: 'password',
         }
         return request(app)
             .patch('/api/user/1')
@@ -133,7 +129,6 @@ describe("PATCH /api/user/:user_id", () => {
                 expect(user).toHaveProperty("user_id");
                 expect(user).toHaveProperty("name");
                 expect(user).toHaveProperty("email");
-                expect(user).toHaveProperty("password");
                 expect(user).toHaveProperty("number");
                 expect(user).toHaveProperty("address");
                 expect(user).toHaveProperty("cv");
@@ -141,7 +136,6 @@ describe("PATCH /api/user/:user_id", () => {
                 expect(typeof user.user_id).toBe("number");
                 expect(typeof user.name).toBe("string");
                 expect(typeof user.email).toBe("string");
-                expect(typeof user.password).toBe("string");
                 expect(typeof user.number).toBe("string");
                 expect(typeof user.address).toBe("string");
                 expect(typeof user.cv).toBe("string");
@@ -155,7 +149,6 @@ describe("POST /api/user", () => {
             name: 'Gilson',
             avatar_img: 'image',
             email: 'email',
-            password: 'password',
             telephone: 'number',
             address: 'address',
             cv: 'cv'
@@ -171,7 +164,6 @@ describe("POST /api/user", () => {
             name: 'Gilson',
             avatar_img: 'image',
             email: 'email',
-            password: 'password',
             number: 98934,
             address: 'address',
             cv: 'cv'
@@ -186,7 +178,6 @@ describe("POST /api/user", () => {
         const newUser = {
             name: 'Gilson',
             email: 'email',
-            password: 'password',
             number: '98934',
             address: 'address',
             cv: 'cv'
@@ -200,7 +191,6 @@ describe("POST /api/user", () => {
                 expect(user).toHaveProperty("user_id");
                 expect(user).toHaveProperty("name");
                 expect(user).toHaveProperty("email");
-                expect(user).toHaveProperty("password");
                 expect(user).toHaveProperty("number");
                 expect(user).toHaveProperty("address");
                 expect(user).toHaveProperty("cv");
@@ -208,7 +198,6 @@ describe("POST /api/user", () => {
                 expect(typeof user.user_id).toBe("number");
                 expect(typeof user.name).toBe("string");
                 expect(typeof user.email).toBe("string");
-                expect(typeof user.password).toBe("string");
                 expect(typeof user.number).toBe("string");
                 expect(typeof user.address).toBe("string");
                 expect(typeof user.cv).toBe("string");

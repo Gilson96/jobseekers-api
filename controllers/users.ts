@@ -5,7 +5,6 @@ import { checkIfExists } from "../utils/checkIfExists.js"
 export const createUser = (req: Request, res: Response) => {
     const { name }: { name: string } = req.body;
     const { email }: { email: string } = req.body;
-    const { password }: { password: string } = req.body;
     const { number }: { number: string } = req.body;
     const { address }: { address: string } = req.body;
     const { cv }: { cv: string } = req.body;
@@ -16,7 +15,6 @@ export const createUser = (req: Request, res: Response) => {
     const requiredFields = [
         "name",
         "email",
-        "password",
         "number",
         "address",
         "cv",
@@ -35,7 +33,7 @@ export const createUser = (req: Request, res: Response) => {
         if (result) {
             return res.status(400).send({ msg: "User email already exists" });
         } else {
-            return create({ name, email, password, number, address, cv })
+            return create({ name, email, number, address, cv })
                 .then((user) => {
                     return res.status(201).send({ user: user[0] });
                 });
@@ -62,7 +60,6 @@ export const updateUser = (req: Request, res: Response) => {
     const user_id = req.params.user_id!
     const { name }: { name: string } = req.body!;
     const { email }: { email: string } = req.body!;
-    const { password }: { password: string } = req.body!;
     const { number }: { number: string } = req.body!;
     const { address }: { address: string } = req.body!;
     const { cv }: { cv: string } = req.body!;
@@ -74,7 +71,6 @@ export const updateUser = (req: Request, res: Response) => {
     const allowedFields = [
         "name",
         "email",
-        "password",
         "number",
         "address",
         "cv",
@@ -93,7 +89,7 @@ export const updateUser = (req: Request, res: Response) => {
         if (!result) {
             return res.status(404).send({ msg: "User not found" });
         } else {
-            return update({ name, email, password, number, address, cv, user_id })
+            return update({ name, email, number, address, cv, user_id })
                 .then((user) => {
                     return res.status(200).send({ user: user[0] });
                 });
