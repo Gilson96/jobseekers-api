@@ -2,9 +2,13 @@ import type { IncomingHttpHeaders } from "http"
 import type { JwtPayload } from "jsonwebtoken"
 
 export type Company = {
-    company_id?: string | number
-    company_name?: string
-    rows?: Company[]
+    company_id?: number
+    company_name?: string,
+    email?: string,
+    password?: string,
+    number?: string,
+    address?: string,
+    role?: string
 }
 
 export type Skills = {
@@ -24,7 +28,7 @@ export type Job = {
 }
 
 export type User = {
-    user_id?: number | string,
+    user_id?: number
     name?: string,
     avatar_img?: string | null,
     email?: string,
@@ -32,6 +36,7 @@ export type User = {
     number?: string,
     address?: string,
     cv?: string
+    role?: string
 }
 
 export type Application = {
