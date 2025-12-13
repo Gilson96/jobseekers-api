@@ -1,10 +1,13 @@
 import type { Request, Response } from "express";
-import { create, findId, update, deleteId } from "../models/users.js"
+import { create, update, deleteId, findOne } from "../models/users.js"
 import { checkIfExists } from "../utils/checkIfExists.js"
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 export const createUser = (req: Request, res: Response) => {
     const { name }: { name: string } = req.body;
     const { email }: { email: string } = req.body;
+    const { password }: { password: string } = req.body;
     const { number }: { number: string } = req.body;
     const { address }: { address: string } = req.body;
     const { cv }: { cv: string } = req.body;
@@ -12,9 +15,11 @@ export const createUser = (req: Request, res: Response) => {
     const fields = Object.keys(req.body);
     const values = Object.values(req.body);
 
+    const saltRounds = 10;
     const requiredFields = [
         "name",
         "email",
+        "password",
         "number",
         "address",
         "cv",
@@ -33,10 +38,19 @@ export const createUser = (req: Request, res: Response) => {
         if (result) {
             return res.status(400).send({ msg: "User email already exists" });
         } else {
-            return create({ name, email, number, address, cv })
-                .then((user) => {
-                    return res.status(201).send({ user: user[0] });
-                });
+            return bcrypt.hash(password, saltRounds, (err, password) => {
+                create({ name, email, password, number, address, cv })
+                    .then((user) => {
+                        return res.status(201).send({
+                            user_id: user[0]?.user_id,
+                            name: user[0]?.name,
+                            email: user[0]?.email,
+                            number: user[0]?.number,
+                            address: user[0]?.address,
+                            cv: user[0]?.cv,
+                        });
+                    });
+            })
         }
     });
 };
@@ -44,12 +58,12 @@ export const createUser = (req: Request, res: Response) => {
 export const findIdUser = (req: Request, res: Response) => {
     const user_id = req.params.user_id!;
     const field = Object.keys(req.params)[0]!;
-
+    console.log(req)
     return checkIfExists("users", field, user_id).then((result) => {
         if (!result) {
             return res.status(404).send({ msg: "User not found" });
         } else {
-            return findId(Number(user_id)).then((user) => {
+            return findOne(Number(user_id)).then((user) => {
                 return res.status(200).send({ user: user[0] });
             });
         }
@@ -60,6 +74,7 @@ export const updateUser = (req: Request, res: Response) => {
     const user_id = req.params.user_id!
     const { name }: { name: string } = req.body!;
     const { email }: { email: string } = req.body!;
+    const { password }: { password: string } = req.body!;
     const { number }: { number: string } = req.body!;
     const { address }: { address: string } = req.body!;
     const { cv }: { cv: string } = req.body!;
@@ -71,6 +86,7 @@ export const updateUser = (req: Request, res: Response) => {
     const allowedFields = [
         "name",
         "email",
+        "password",
         "number",
         "address",
         "cv",
@@ -110,3 +126,43 @@ export const deleteUser = (req: Request, res: Response) => {
         }
     });
 };
+
+export const login = (req: Request, res: Response) => {
+    const { email }: { email: string } = req.body
+    const { password }: { password: string } = req.body
+
+    return checkIfExists('users', 'email', email).then((result) => {
+        if (!result) {
+            return res.status(404).send({ msg: 'User email not found' })
+        } else {
+            findOne(undefined, email).then((user) => {
+                const userPassword = user[0]?.password!
+                const user_id = user[0]?.user_id!
+
+                bcrypt.compare(password, userPassword, (err, result) => {
+                    if (err) {
+                        console.log('Error comparing passowrds:', err)
+                    } else {
+                        if (result) {
+                            const token = jwt.sign(
+                                { user_id: user_id, email: email},
+                                'c_cret_password',
+                                {
+                                    expiresIn: '1h',
+                                    algorithm: 'HS256'
+                                }
+                            )
+                            return res.status(200).send({
+                                user_id: user[0]?.user_id,
+                                email: user[0]?.email,
+                                token: token
+                            })
+                        } else {
+                            return res.status(401).send({ msg: "Incorrect password" })
+                        }
+                    }
+                })
+            })
+        }
+    })
+}

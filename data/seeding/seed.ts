@@ -3,6 +3,7 @@ import db from "../connection.js";
 import { createTables } from "./createTables.js";
 import { dropTables } from "./dropTables.js";
 import { format } from "node-pg-format"
+import bcrypt from 'bcrypt'
 
 export const seed = ({
     companies,
@@ -75,22 +76,27 @@ export const seed = ({
 
             return db.query(insertIntoJobs);
         }).then(() => {
-            const formatUser = users.map((user) => {
-                return [
-                    user.name,
-                    user.email,
-                    user.number,
-                    user.address,
-                    user.cv,
-                ];
-            });
+            const saltRounds = 10;
+            return Promise.all(users.map((user) => {
+                return bcrypt.hash(user.password!, saltRounds).then((password) => {
+                    return [
+                        user.name,
+                        user.email,
+                        password,
+                        user.number,
+                        user.address,
+                        user.cv,
+                    ];
+                })
 
-            const insertIntoUser = format(
-                `INSERT INTO users (name,email,number,address,cv) VALUES %L RETURNING*;`,
-                formatUser
-            );
+            })).then((formatUser) => {
+                const insertIntoUser = format(
+                    `INSERT INTO users (name,email,password,number,address,cv) VALUES %L RETURNING*;`,
+                    formatUser
+                )
 
-            return db.query(insertIntoUser);
+                return db.query(insertIntoUser);
+            })
         }).then(() => {
             const formatApplications = applications.map((application) => {
                 return [application.job_id, application.user_id];

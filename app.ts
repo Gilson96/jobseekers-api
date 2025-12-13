@@ -13,17 +13,18 @@ import skillsJobRouter from './routes/skillsJob.js'
 import savedJobRouter from './routes/saved_job.js'
 
 const app = express()
+
 app.use(cors());
 app.use(express.json())
 
 const apiRouter = express.Router()
 
 app.use("/api", apiRouter)
-apiRouter.use("/company", companyRouter)
-apiRouter.use("/user", usersRouter)
 apiRouter.use("/job", jobRouter)
 apiRouter.use("/skills", skillsRouter)
 apiRouter.use("/application", applicationRouter)
+apiRouter.use("/user", usersRouter)
+apiRouter.use("/company", companyRouter)
 apiRouter.use("/user/application_user", applicationUserRouter)
 apiRouter.use("/job/application_job", applicationJobRouter)
 apiRouter.use("/user/skills_user", skillsUserRouter)

@@ -30,6 +30,7 @@ export const createTables = () => {
           user_id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
           email VARCHAR(255) NOT NULL UNIQUE,
+          password VARCHAR(255),
           number VARCHAR(255) NOT NULL,
           address VARCHAR(255) NOT NULL,
           cv TEXT NOT NULL
