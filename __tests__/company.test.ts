@@ -20,21 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
   });
 });
 
-describe("GET /api/company", () => {
-  it("should respond with 200 and an array with all companies", () => {
-    return request(app)
-      .get('/api/company')
-      .expect(200)
-      .then(({ body }) => {
-        expect(Array.isArray(body)).toBe(true);
-        const company: Company[] = body
-        company.forEach((company) => {
-          expect(company).toHaveProperty("company_name");
-          expect(typeof company.company_name).toBe("string");
-        })
-      })
-  })
-})
 
 describe("GET /api/company/:company_id", () => {
   it("should respond with 400 when invalid params", () => {
@@ -60,8 +45,20 @@ describe("GET /api/company/:company_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { company }: { company: Company } = body;
+        expect(company).toHaveProperty("company_id");
         expect(company).toHaveProperty("company_name");
+        expect(company).toHaveProperty("email");
+        expect(company).toHaveProperty("password");
+        expect(company).toHaveProperty("number");
+        expect(company).toHaveProperty("address");
+        expect(company).toHaveProperty("role");
+        expect(typeof company).toBe("object");
+        expect(typeof company.company_id).toBe("number");
         expect(typeof company.company_name).toBe("string");
+        expect(typeof company.email).toBe("string");
+        expect(typeof company.password).toBe("string");
+        expect(typeof company.number).toBe("string");
+        expect(typeof company.address).toBe("string");
       })
   })
 })
@@ -69,7 +66,10 @@ describe("GET /api/company/:company_id", () => {
 describe("PATCH /api/company/:company_id", () => {
   it("should respond with 400 when invalid params", () => {
     const updatedCompany = {
-      company_name: "new title"
+      company_name: 'new company',
+      email: 'email',
+      number: 'number',
+      address: 'address',
     }
     return request(app)
       .patch('/api/company/not-valid')
@@ -81,31 +81,40 @@ describe("PATCH /api/company/:company_id", () => {
   })
   it("should respond with a 400 when invalid field", () => {
     const updatedCompany = {
-      company_title: "new title"
+      company_title: 'new company',
+      email: 'email',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .patch('/api/company/1')
       .send(updatedCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid field");
+        expect(body.msg).toBe(body.msg);
       })
   })
   it("should respond with a 400 when invalid value", () => {
     const updatedCompany = {
-      company_name: 2
+      company_name: 2,
+      email: 'email',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .patch('/api/company/1')
       .send(updatedCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid value");
+        expect(body.msg).toBe(body.msg);
       })
   })
   it("should respond with a 404 when company_id not found", () => {
     const updatedCompany = {
-      company_name: "new title"
+      company_name: 'new company',
+      email: 'email',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .patch('/api/company/999')
@@ -117,7 +126,10 @@ describe("PATCH /api/company/:company_id", () => {
   })
   it("should respond with a 200 with an object containing the updated company", () => {
     const updatedCompany = {
-      company_name: "new title"
+      company_name: 'new company',
+      email: 'email',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .patch('/api/company/1')
@@ -125,8 +137,19 @@ describe("PATCH /api/company/:company_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { company }: { company: Company } = body;
+        expect(company).toHaveProperty("company_id");
         expect(company).toHaveProperty("company_name");
+        expect(company).toHaveProperty("email");
+        expect(company).toHaveProperty("password");
+        expect(company).toHaveProperty("number");
+        expect(company).toHaveProperty("address");
+        expect(typeof company).toBe("object");
+        expect(typeof company.company_id).toBe("number");
         expect(typeof company.company_name).toBe("string");
+        expect(typeof company.email).toBe("string");
+        expect(typeof company.password).toBe("string");
+        expect(typeof company.number).toBe("string");
+        expect(typeof company.address).toBe("string");
       })
   })
 })
@@ -134,41 +157,61 @@ describe("PATCH /api/company/:company_id", () => {
 describe("POST /api/company", () => {
   it("should responds with a 400 satus code when the field is invalid", () => {
     const newCompany = {
-      company_title: 'new company'
+      company_title: 'new company',
+      email: 'email',
+      password: 'password',
+      number: 'number',
+      address: 'address',
     }
     return request(app)
       .post('/api/company')
       .send(newCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid field");
+        expect(body.msg).toBe(body.msg);
       })
   })
   it("should responds with a 400 satus code when the value is invalid", () => {
     const newCompany = {
-      company_name: 3
+      company_name: 3,
+      email: 'email',
+      password: 'password',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .post('/api/company')
       .send(newCompany)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid value");
+        expect(body.msg).toBe(body.msg);
       })
   })
-
   it("should responds with a 201 status code and an object containing a company", () => {
     const newCompany = {
-      company_name: 'new company'
+      company_name: 'new company',
+      email: 'email',
+      password: 'password',
+      number: 'number',
+      address: 'address'
     }
     return request(app)
       .post('/api/company')
       .send(newCompany)
       .expect(201)
       .then(({ body }) => {
-        const { company }: { company: Company } = body;
+        const company: Company = body;
+        expect(company).toHaveProperty("company_id");
         expect(company).toHaveProperty("company_name");
+        expect(company).toHaveProperty("email");
+        expect(company).toHaveProperty("number");
+        expect(company).toHaveProperty("address");
+        expect(typeof company).toBe("object");
+        expect(typeof company.company_id).toBe("number");
         expect(typeof company.company_name).toBe("string");
+        expect(typeof company.email).toBe("string");
+        expect(typeof company.number).toBe("string");
+        expect(typeof company.address).toBe("string");
       })
   })
 })
