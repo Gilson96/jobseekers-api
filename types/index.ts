@@ -1,7 +1,10 @@
+import type { IncomingHttpHeaders } from "http"
+import type { JwtPayload } from "jsonwebtoken"
+
 export type Company = {
     company_id?: string | number
     company_name?: string
-    rows?: Company[] 
+    rows?: Company[]
 }
 
 export type Skills = {
@@ -71,4 +74,8 @@ export type ErrorHandler = {
     code: string
     status: number,
     msg: string
+}
+
+export interface AuthRequest extends Request {
+    user?: JwtPayload | string;
 }
