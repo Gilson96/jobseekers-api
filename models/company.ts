@@ -2,13 +2,15 @@ import { format } from "node-pg-format"
 import db from "../data/connection.js";
 import type { Company } from "../types/index.js";
 
-export const create = (company_name: string) => {
+export const create = ({ company_name, email, password, number, address }: Company) => {
     return db
-        .query(`INSERT INTO company (company_name) VALUES($1) RETURNING *;`, [company_name])
+        .query(`INSERT INTO company (company_name,email,password,number,address,role) VALUES($1,$2,$3,$4,$5,DEFAULT) RETURNING *;`,
+            [company_name, email, password, number, address])
         .then(({ rows }: { rows: Company[] }) => {
             return rows;
         });
 };
+
 
 export const findAll = () => {
     return db.query(`SELECT * FROM company;`).then(({ rows }: { rows: Company[] }) => {
@@ -24,11 +26,17 @@ export const findId = (company_id: number) => {
         });
 };
 
-export const update = (company_name: string, company_id: number) => {
+export const update = ({ company_name, email, password, number, address, company_id }: Company) => {
     return db
         .query(
-            `UPDATE company SET company_name = COALESCE($1, company_name) WHERE company_id = $2 RETURNING *;`,
-            [company_name, company_id]
+            `UPDATE company 
+        SET company_name = COALESCE($1, company_name),
+        email = COALESCE($2, email),       
+        password = COALESCE($3, password),       
+        number = COALESCE($4, number),
+        address = COALESCE($5, address) 
+        WHERE company_id = $6 RETURNING *;`,
+            [company_name, email, password, number, address, company_id]
         )
         .then(({ rows }: { rows: Company[] }) => {
             return rows;

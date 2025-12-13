@@ -4,7 +4,7 @@ import db from '../data/connection.js'
 export const create = ({ name, email, password, number, address, cv }: User) => {
     return db
         .query(
-            `INSERT INTO users(name,email,password,number,address,cv) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`,
+            `INSERT INTO users(name,email,password,number,address,cv, role) VALUES ($1,$2,$3,$4,$5,$6,DEFAULT) RETURNING *;`,
             [name, email, password, number, address, cv]
         )
         .then(({ rows }: { rows: User[] }) => {

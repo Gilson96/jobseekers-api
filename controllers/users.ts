@@ -74,7 +74,6 @@ export const updateUser = (req: Request, res: Response) => {
     const user_id = req.params.user_id!
     const { name }: { name: string } = req.body!;
     const { email }: { email: string } = req.body!;
-    const { password }: { password: string } = req.body!;
     const { number }: { number: string } = req.body!;
     const { address }: { address: string } = req.body!;
     const { cv }: { cv: string } = req.body!;
@@ -86,7 +85,6 @@ export const updateUser = (req: Request, res: Response) => {
     const allowedFields = [
         "name",
         "email",
-        "password",
         "number",
         "address",
         "cv",
@@ -145,7 +143,7 @@ export const login = (req: Request, res: Response) => {
                     } else {
                         if (result) {
                             const token = jwt.sign(
-                                { user_id: user_id, email: email},
+                                { user_id: user_id, email: email },
                                 'c_cret_password',
                                 {
                                     expiresIn: '1h',
