@@ -5,7 +5,12 @@ export const createTables = () => {
   return db.query(
     `CREATE TABLE company (
         company_id SERIAL PRIMARY KEY,
-        company_name VARCHAR(255) UNIQUE
+        company_name VARCHAR(255) UNIQUE,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255),
+        number VARCHAR(255) NOT NULL,
+        address VARCHAR(255) NOT NULL,
+        role VARCHAR(10) DEFAULT 'admin' NOT NULL
         );`
   )
     .then(() => {
@@ -33,7 +38,8 @@ export const createTables = () => {
           password VARCHAR(255),
           number VARCHAR(255) NOT NULL,
           address VARCHAR(255) NOT NULL,
-          cv TEXT NOT NULL
+          cv TEXT NOT NULL,
+          role VARCHAR(10) DEFAULT 'user' NOT NULL
       );`);
     })
     .then(() => {

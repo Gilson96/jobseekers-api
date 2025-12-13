@@ -1,4 +1,7 @@
-import type { Application, Application_job, Application_user, Company, Job, Saved_job, Skills, Skills_job, Skills_user, User } from "../../types/index.js";
+import type {
+    Application, Application_job, Application_user, Company, Job,
+    Saved_job, Skills, Skills_job, Skills_user, User
+} from "../../types/index.js";
 import db from "../connection.js";
 import { createTables } from "./createTables.js";
 import { dropTables } from "./dropTables.js";
@@ -30,16 +33,25 @@ export const seed = ({
 }) => {
     return dropTables().then(() => {
         return createTables().then(() => {
-            const formatCompaniesData = companies.map((company) => {
-                return [company.company_name];
-            });
-
-            const insertIntoCompany = format(
-                `INSERT INTO company (company_name) VALUES %L RETURNING*;`,
-                formatCompaniesData
-            );
-
-            return db.query(insertIntoCompany);
+            const saltRounds = 10;
+            return Promise.all(companies.map((company) => {
+                return bcrypt.hash(company.password!, saltRounds).then((password) => {
+                    return [
+                        company.company_name,
+                        company.email,
+                        password,
+                        company.number,
+                        company.address,
+                        company.role
+                    ];
+                })
+            })).then((formatCompaniesData) => {
+                const insertIntoCompany = format(
+                    `INSERT INTO company (company_name,email,password,number,address,role) VALUES %L RETURNING*;`,
+                    formatCompaniesData
+                );
+                return db.query(insertIntoCompany);
+            })
         }).then(({ rows }) => {
             const companyIds = rows;
 
@@ -86,12 +98,13 @@ export const seed = ({
                         user.number,
                         user.address,
                         user.cv,
+                        user.role
                     ];
                 })
 
             })).then((formatUser) => {
                 const insertIntoUser = format(
-                    `INSERT INTO users (name,email,password,number,address,cv) VALUES %L RETURNING*;`,
+                    `INSERT INTO users (name,email,password,number,address,cv,role) VALUES %L RETURNING*;`,
                     formatUser
                 )
 
