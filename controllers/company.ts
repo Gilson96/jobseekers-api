@@ -9,7 +9,6 @@ import type { Company } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
 export const createCompany = (req: Request, res: Response) => {
     const { company_name }: { company_name: string } = req.body;

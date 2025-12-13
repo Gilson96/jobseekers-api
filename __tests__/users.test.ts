@@ -22,20 +22,10 @@ describe("checks if attempting to access a non-existent endpoint", () => {
 
 describe("GET /api/users/:user_id", () => {
     it("should respond with 400 when invalid params", () => {
-        const login = {
-            email: "user@user.com",
-            password: "user123",
-        }
         return request(app)
-            .post('/api/user/login')
-            .send(login)
-            .expect(200).then(({ body }) => {
-                return request(app)
-                    .get('/api/user/not-valid')
-                    .expect(400)
-                    .then(({ body }) => {
-                        expect(body.msg).toBe("Invalid params");
-                    })
+            .get('/api/user/not-valid')
+            .expect(400).then(({ body }) => {
+                expect(body.msg).toBe("Invalid params");
             })
     })
     it("should respond with 404 when user id not found", () => {
@@ -223,7 +213,6 @@ describe("POST /api/user", () => {
                 expect(user).toHaveProperty("number");
                 expect(user).toHaveProperty("address");
                 expect(user).toHaveProperty("cv");
-                expect(user).toHaveProperty("token");
                 expect(typeof user).toBe("object");
                 expect(typeof user.user_id).toBe("number");
                 expect(typeof user.name).toBe("string");
@@ -231,7 +220,6 @@ describe("POST /api/user", () => {
                 expect(typeof user.number).toBe("string");
                 expect(typeof user.address).toBe("string");
                 expect(typeof user.cv).toBe("string");
-                expect(typeof user.token).toBe("string");
             })
     })
 })
@@ -259,86 +247,6 @@ describe("DELETE /api/user", () => {
 
 })
 
-describe("POST /api/user/login", () => {
-    it("should responds with a 404 code when user email doesnt exists", () => {
-        const newUser = {
-            name: 'Gilson',
-            email: 'email2',
-            password: 'password2',
-            number: '98934',
-            address: 'address',
-            cv: 'cv'
-        }
-        const userLogin = {
-            email: 'email',
-            password: 'password2',
-        }
-        return request(app)
-            .post('/api/user')
-            .send(newUser)
-            .expect(201).then(() => {
-                return request(app)
-                    .post('/api/user/login')
-                    .send(userLogin)
-                    .expect(404).then(({ body }) => expect(body.msg).toBe('User email not found'))
-            })
-    })
-    it("should responds with a 401 code when the password is incorrect", () => {
-        const newUser = {
-            name: 'Gilson',
-            email: 'email2',
-            password: 'password2',
-            number: '98934',
-            address: 'address',
-            cv: 'cv'
-        }
-        const userLogin = {
-            email: 'email2',
-            password: 'password',
-        }
-        return request(app)
-            .post('/api/user')
-            .send(newUser)
-            .expect(201).then(() => {
-                return request(app)
-                    .post('/api/user/login')
-                    .send(userLogin)
-                    .expect(401).then(({ body }) => expect(body.msg).toBe('Incorrect password'))
-            })
-    })
-    it("should responds with a 201 status code and an object containing a user", () => {
-        const newUser = {
-            name: 'Gilson',
-            email: 'email2',
-            password: 'password2',
-            number: '98934',
-            address: 'address',
-            cv: 'cv'
-        }
-        const userLogin = {
-            email: 'email2',
-            password: 'password2',
-        }
-        return request(app)
-            .post('/api/user')
-            .send(newUser)
-            .expect(201).then(() => {
-                return request(app)
-                    .post('/api/user/login')
-                    .send(userLogin)
-                    .expect(200).then(({ body }) => {
-                        const user = body;
-                        expect(user).toHaveProperty("user_id");
-                        expect(user).toHaveProperty("email");
-                        expect(user).toHaveProperty("token");
-                        expect(typeof user).toBe("object");
-                        expect(typeof user.user_id).toBe("number");
-                        expect(typeof user.email).toBe("string");
-                        expect(typeof user.token).toBe("string")
-                    })
-            })
-    })
-})
 
 
 

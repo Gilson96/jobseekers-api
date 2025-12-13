@@ -20,7 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
   });
 });
 
-
 describe("GET /api/company/:company_id", () => {
   it("should respond with 400 when invalid params", () => {
     return request(app)

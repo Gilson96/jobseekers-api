@@ -1,4 +1,3 @@
-import { format } from "node-pg-format"
 import db from "../data/connection.js";
 import type { Company } from "../types/index.js";
 
@@ -10,7 +9,6 @@ export const create = ({ company_name, email, password, number, address }: Compa
             return rows;
         });
 };
-
 
 export const findAll = () => {
     return db.query(`SELECT * FROM company;`).then(({ rows }: { rows: Company[] }) => {
