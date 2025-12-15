@@ -11,7 +11,6 @@ import applicationJobRouter from './routes/applicationJob.js'
 import skillsUserRouter from './routes/skillsUser.js'
 import skillsJobRouter from './routes/skillsJob.js'
 import savedJobRouter from './routes/saved_job.js'
-import loginRouter from './routes/login.js'
 import { login } from './controllers/login.js'
 
 const app = express()
