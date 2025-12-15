@@ -11,6 +11,8 @@ import applicationJobRouter from './routes/applicationJob.js'
 import skillsUserRouter from './routes/skillsUser.js'
 import skillsJobRouter from './routes/skillsJob.js'
 import savedJobRouter from './routes/saved_job.js'
+import loginRouter from './routes/login.js'
+import { login } from './controllers/login.js'
 
 const app = express()
 
@@ -19,7 +21,10 @@ app.use(express.json())
 
 const apiRouter = express.Router()
 
+
 app.use("/api", apiRouter)
+
+apiRouter.use("/login", login)
 apiRouter.use("/job", jobRouter)
 apiRouter.use("/skills", skillsRouter)
 apiRouter.use("/application", applicationRouter)
