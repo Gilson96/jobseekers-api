@@ -208,6 +208,5 @@ describe("DELETE /api/user", () => {
     it("should respond with a 204 when user deleted", () => {
         return request(app).delete('/api/user/1').auth(token, { type: 'bearer' }).expect(204)
     })
-
 })
 

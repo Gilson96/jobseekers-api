@@ -8,7 +8,6 @@ usersRouter.post("/", createUser)
 
 usersRouter.get("/:user_id", checkAuth, findIdUser)
 usersRouter.patch("/:user_id", checkAuth, updateUser)
-
 usersRouter.delete("/:user_id", checkAuth, deleteUser)
 
 
