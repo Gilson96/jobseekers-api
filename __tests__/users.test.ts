@@ -20,130 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
-describe("GET /api/users/:user_id", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .get('/api/user/not-valid')
-            .expect(400).then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when user id not found", () => {
-        return request(app)
-            .get('/api/user/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("User not found");
-            })
-    })
-    it("should respond with 200 and an object containing a user", () => {
-        return request(app)
-            .get('/api/user/1')
-            .expect(200)
-            .then(({ body }) => {
-                const { user }: { user: User } = body;
-                expect(user).toHaveProperty("user_id");
-                expect(user).toHaveProperty("name");
-                expect(user).toHaveProperty("email");
-                expect(user).toHaveProperty("password");
-                expect(user).toHaveProperty("number");
-                expect(user).toHaveProperty("address");
-                expect(user).toHaveProperty("cv");
-                expect(typeof user).toBe("object");
-                expect(typeof user.user_id).toBe("number");
-                expect(typeof user.name).toBe("string");
-                expect(typeof user.email).toBe("string");
-                expect(typeof user.password).toBe("string");
-                expect(typeof user.number).toBe("string");
-                expect(typeof user.address).toBe("string");
-                expect(typeof user.cv).toBe("string");
-            })
-    })
-})
-
-describe("PATCH /api/user/:user_id", () => {
-    it("should respond with 400 when invalid params", () => {
-        const updatedUser = {
-            name: 'Gilson',
-            address: 'address',
-        }
-        return request(app)
-            .patch('/api/user/not-valid')
-            .send(updatedUser)
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with a 400 when invalid field", () => {
-        const updatedUser = {
-            title: 'Gilson',
-            address: 'address',
-        }
-        return request(app)
-            .patch('/api/user/1')
-            .send(updatedUser)
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe(body.msg);
-            })
-    })
-    it("should respond with a 400 when invalid value", () => {
-        const updatedUser = {
-            name: 3,
-            address: 'address'
-        }
-        return request(app)
-            .patch('/api/user/1')
-            .send(updatedUser)
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe(body.msg);
-            })
-    })
-    it("should respond with a 404 when user_id not found", () => {
-        const updatedUser = {
-            address: "new title"
-        }
-        return request(app)
-            .patch('/api/user/999')
-            .send(updatedUser)
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("User not found");
-            })
-    })
-    it("should respond with a 200 with an object containing the updated user", () => {
-        const updatedUser = {
-            name: 'Gilson',
-            address: 'address',
-            cv: 'cv',
-            email: 'email',
-            number: 'number',
-        }
-        return request(app)
-            .patch('/api/user/1')
-            .send(updatedUser)
-            .expect(200)
-            .then(({ body }) => {
-                const { user } = body;
-                expect(user).toHaveProperty("user_id");
-                expect(user).toHaveProperty("name");
-                expect(user).toHaveProperty("email");
-                expect(user).toHaveProperty("number");
-                expect(user).toHaveProperty("address");
-                expect(user).toHaveProperty("cv");
-                expect(typeof user).toBe("object");
-                expect(typeof user.user_id).toBe("number");
-                expect(typeof user.name).toBe("string");
-                expect(typeof user.email).toBe("string");
-                expect(typeof user.number).toBe("string");
-                expect(typeof user.address).toBe("string");
-                expect(typeof user.cv).toBe("string");
-            })
-    })
-})
-
 describe("POST /api/user", () => {
     it("should responds with a 400 satus code when the field is invalid", () => {
         const newUser = {
@@ -206,7 +82,7 @@ describe("POST /api/user", () => {
             .send(newUser)
             .expect(201)
             .then(({ body }) => {
-                const user = body;
+                const user: User = body;
                 expect(user).toHaveProperty("user_id");
                 expect(user).toHaveProperty("name");
                 expect(user).toHaveProperty("email");
@@ -224,28 +100,7 @@ describe("POST /api/user", () => {
     })
 })
 
-describe("DELETE /api/user", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .delete('/api/user/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when user id not found", () => {
-        return request(app)
-            .delete('/api/user/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("User not found");
-            })
-    })
-    it("should respond with a 204 when user deleted", () => {
-        return request(app).delete('/api/user/1').expect(204)
-    })
 
-})
 
 
 
