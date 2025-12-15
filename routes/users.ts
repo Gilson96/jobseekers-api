@@ -4,13 +4,12 @@ import { checkAuth } from '../middleware/auth.js';
 
 const usersRouter = express.Router()
 
-
 usersRouter.post("/", createUser)
 
-usersRouter.get("/:user_id", findIdUser)
-usersRouter.patch("/:user_id", updateUser)
+usersRouter.get("/:user_id", checkAuth, findIdUser)
+usersRouter.patch("/:user_id", checkAuth, updateUser)
 
-usersRouter.delete("/:user_id", deleteUser)
+usersRouter.delete("/:user_id", checkAuth, deleteUser)
 
 
 export default usersRouter

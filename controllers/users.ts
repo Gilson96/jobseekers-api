@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { create, update, deleteId, findOne } from "../models/users.js"
 import { checkIfExists } from "../utils/checkIfExists.js"
 import bcrypt from 'bcrypt'
+import type { AuthRequest } from "../types/index.js";
 
 export const createUser = (req: Request, res: Response) => {
     const { name }: { name: string } = req.body;
@@ -55,10 +56,15 @@ export const createUser = (req: Request, res: Response) => {
     });
 };
 
-export const findIdUser = (req: Request, res: Response) => {
+export const findIdUser = (req: AuthRequest, res: Response) => {
     const user_id = req.params.user_id!;
     const field = Object.keys(req.params)[0]!;
-    console.log(req)
+    const role = req.user?.role
+
+    if (role !== 'user') {
+        res.status(401).send({ msg: 'No access to account' })
+    }
+
     return checkIfExists("users", field, user_id).then((result) => {
         if (!result) {
             return res.status(404).send({ msg: "User not found" });
@@ -70,7 +76,7 @@ export const findIdUser = (req: Request, res: Response) => {
     });
 };
 
-export const updateUser = (req: Request, res: Response) => {
+export const updateUser = (req: AuthRequest, res: Response) => {
     const user_id = req.params.user_id!
     const { name }: { name: string } = req.body!;
     const { email }: { email: string } = req.body!;
@@ -79,6 +85,8 @@ export const updateUser = (req: Request, res: Response) => {
     const { cv }: { cv: string } = req.body!;
 
     const fields = req.body!;
+    const role = req.user?.role
+
     const fieldToUpdate = Object.keys(fields)!;
     const valueToUpdate = Object.values(fields)!;
 
@@ -89,6 +97,10 @@ export const updateUser = (req: Request, res: Response) => {
         "address",
         "cv",
     ];
+
+    if (role !== 'user') {
+        res.status(401).send({ msg: "No access to account" })
+    }
 
     for (let i = 0; i < fieldToUpdate.length; i++) {
         if (!allowedFields.includes(fieldToUpdate[i]!)) {
@@ -111,8 +123,13 @@ export const updateUser = (req: Request, res: Response) => {
     });
 };
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = (req: AuthRequest, res: Response) => {
     const user_id = req.params.user_id!;
+    const role = req.user?.role
+
+    if (role !== 'user') {
+        res.status(401).send({ msg: 'No access to account' })
+    }
 
     return checkIfExists("users", "user_id", user_id).then((result) => {
         if (!result) {
