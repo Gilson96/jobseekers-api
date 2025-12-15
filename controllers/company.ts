@@ -1,11 +1,5 @@
-import {
-    create,
-    findAll,
-    findId,
-    update,
-    deleteId,
-} from "../models/company.js"
-import type { Company } from "../types/index.js";
+import { create, update, deleteId, findOne } from "../models/company.js"
+import type { AuthRequest, Company } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 import bcrypt from 'bcrypt'
@@ -59,28 +53,27 @@ export const createCompany = (req: Request, res: Response) => {
     })
 };
 
-export const findAllCompanies = (req: Request, res: Response) => {
-    return findAll().then((companies: Company[]) => {
-        return res.status(200).send(companies);
-    });
-};
-
-export const findIdCompany = (req: Request, res: Response) => {
+export const findIdCompany = (req: AuthRequest, res: Response) => {
     const company_id = req.params.company_id!
     const field = Object.keys(req.params)[0]!;
+    const role = req.user?.role
+
+    if (role !== 'admin') {
+        res.status(401).send({ msg: 'No access to account' })
+    }
 
     return checkIfExists('company', field, company_id).then((result) => {
         if (!result) {
             return res.status(404).send({ msg: "Company not found" });
         } else {
-            return findId(Number(company_id)).then((company: Company[]) => {
+            return findOne(Number(company_id)).then((company: Company[]) => {
                 return res.status(200).send({ company: company[0] });
             })
         }
     })
 };
 
-export const updateCompany = (req: Request, res: Response) => {
+export const updateCompany = (req: AuthRequest, res: Response) => {
     const company_id = req.params.company_id!;
     const { company_name }: { company_name: string } = req.body;
     const { email }: { email: string } = req.body;
@@ -88,6 +81,8 @@ export const updateCompany = (req: Request, res: Response) => {
     const { address }: { address: string } = req.body;
 
     const fields = req.body!;
+    const role = req.user?.role
+
     const fieldToUpdate = Object.keys(fields)!;
     const valueToUpdate = Object.values(fields)!;
 
@@ -97,6 +92,10 @@ export const updateCompany = (req: Request, res: Response) => {
         "number",
         "address",
     ];
+
+    if (role !== 'admin') {
+        res.status(401).send({ msg: "No access to account" })
+    }
 
     for (let i = 0; i < fieldToUpdate.length; i++) {
         if (!allowedFields.includes(fieldToUpdate[i]!)) {
@@ -119,9 +118,14 @@ export const updateCompany = (req: Request, res: Response) => {
     );
 };
 
-export const deleteCompany = (req: Request, res: Response) => {
+export const deleteCompany = (req: AuthRequest, res: Response) => {
     const company_id = req.params.company_id!;
     const field = Object.keys(req.params)[0]!;
+    const role = req.user?.role
+
+    if (role !== 'admin') {
+        res.status(401).send({ msg: 'No access to account' })
+    }
 
     return checkIfExists('company', field, company_id).then((result) => {
         if (!result) {

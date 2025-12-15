@@ -16,12 +16,20 @@ export const findAll = () => {
     });
 };
 
-export const findId = (company_id: number) => {
-    return db
-        .query(`SELECT * FROM company WHERE company.company_id = $1;`, [company_id])
-        .then(({ rows }: { rows: Company[] }) => {
-            return rows;
-        });
+export const findOne = (company_id?: number, email?: string) => {
+    if (company_id === undefined) {
+        return db
+            .query(`SELECT * FROM company WHERE email = $1;`, [email])
+            .then(({ rows }: { rows: Company[] }) => {
+                return rows;
+            });
+    } else {
+        return db
+            .query(`SELECT * FROM company WHERE company_id = $1;`, [company_id])
+            .then(({ rows }: { rows: Company[] }) => {
+                return rows;
+            });
+    }
 };
 
 export const update = ({ company_name, email, password, number, address, company_id }: Company) => {
