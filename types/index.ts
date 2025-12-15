@@ -1,5 +1,6 @@
 import type { IncomingHttpHeaders } from "http"
 import type { JwtPayload } from "jsonwebtoken"
+import { type Request } from "express"
 
 export type Company = {
     company_id?: number
@@ -82,5 +83,9 @@ export type ErrorHandler = {
 }
 
 export interface AuthRequest extends Request {
-    user?: JwtPayload | string;
+    user?: {
+        user_id: number
+        email: string,
+        role: string,
+    } | JwtPayload
 }
