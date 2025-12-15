@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import type { AuthRequest } from "../types/index.js";
 
-export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
+export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const token = req.headers.authorization?.split(' ')[1]
 
