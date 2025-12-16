@@ -87,7 +87,7 @@ export const seed = ({
             );
 
             return db.query(insertIntoJobs);
-        }).then(() => {
+        }).then(({ rows }) => {
             const saltRounds = 10;
             return Promise.all(users.map((user) => {
                 return bcrypt.hash(user.password!, saltRounds).then((password) => {
@@ -146,16 +146,6 @@ export const seed = ({
             );
             return db.query(insertIntoApplication_job);
         }).then(() => {
-            const formatSkills_user = skills_user.map((skill_user) => {
-                return [skill_user.user_id, skill_user.skills_id];
-            });
-
-            const insertIntoSkills_person = format(
-                `INSERT INTO skills_user (user_id,skills_id) VALUES %L RETURNING*;`,
-                formatSkills_user
-            );
-            return db.query(insertIntoSkills_person);
-        }).then(() => {
             const formatSkills_job = skills_job.map((skill_job) => {
                 return [skill_job.job_id, skill_job.skills_id];
             });
@@ -166,18 +156,27 @@ export const seed = ({
             );
 
             return db.query(insertIntoSkills_job);
-        });
-    }).then(() => {
-        const formatSaved_job = saved_jobs.map((saved_jobs) => {
-            return [saved_jobs.user_id, saved_jobs.job_id]
+        }).then(() => {
+            const formatSkills_user = skills_user.map((skill_user) => {
+                return [skill_user.user_id, skill_user.skills_id];
+            });
+
+            const insertIntoSkills_user = format(
+                `INSERT INTO skills_user (user_id,skills_id) VALUES %L RETURNING*;`,
+                formatSkills_user
+            );
+            return db.query(insertIntoSkills_user);
+        }).then(() => {
+            const formatSaved_job = saved_jobs.map((saved_jobs) => {
+                return [saved_jobs.user_id, saved_jobs.job_id]
+            })
+
+            const insertIntoSaved_job = format(
+                `INSERT INTO saved_job(user_id,job_id) VALUES %L RETURNING*;`,
+                formatSaved_job
+            );
+
+            return db.query(insertIntoSaved_job)
         })
-
-        const insertIntoSaved_job = format(
-            `INSERT INTO saved_job(user_id,job_id) VALUES %L RETURNING*;`,
-            formatSaved_job
-        );
-
-        return db.query(insertIntoSaved_job)
     })
-};
-
+}
