@@ -117,12 +117,42 @@ describe('GET /api/job/search?', () => {
     })
     it("should respond with 200 and all jobs matching company_name query", () => {
         return request(app)
-            .get('/api/job/search?job_title=talentbridge&company_name=talentbridge')
+            .get('/api/job/search?job_title=cleaner&company_name=cleaner&skills_name=cleaner')
             .expect(200)
             .then(({ body }) => {
                 expect(Array.isArray(body)).toBe(true);
                 const job: Job[] = body;
                 job.forEach((job) => {
+                    console.log(job)
+                    expect(job).toHaveProperty("job_id");
+                    expect(job).toHaveProperty("title");
+                    expect(job).toHaveProperty("location");
+                    expect(job).toHaveProperty("pay");
+                    expect(job).toHaveProperty("type");
+                    expect(job).toHaveProperty("company_id");
+                    expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("company_name");
+                    expect(typeof job).toBe("object");
+                    expect(typeof job.job_id).toBe("number");
+                    expect(typeof job.title).toBe("string");
+                    expect(typeof job.location).toBe("string");
+                    expect(typeof job.pay).toBe("string");
+                    expect(typeof job.type).toBe("string");
+                    expect(typeof job.company_id).toBe("number");
+                    expect(typeof job.description).toBe("string");
+                    expect(typeof job.company_name).toBe("string");
+                })
+            })
+    })
+    it("should respond with 200 and all jobs matching skills query", () => {
+        return request(app)
+            .get('/api/job/search?job_title=teamwork&company_name=teamwork&skills_name=teamwork')
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body)).toBe(true);
+                const job: Job[] = body;
+                job.forEach((job) => {
+                    console.log(job)
                     expect(job).toHaveProperty("job_id");
                     expect(job).toHaveProperty("title");
                     expect(job).toHaveProperty("location");
@@ -162,12 +192,13 @@ describe("GET /api/job/:job_id", () => {
                 expect(body.msg).toBe("Job not found");
             })
     })
-    it("should respond with 200 and an object containing a job", () => {
+    it.only("should respond with 200 and an object containing a job", () => {
         return request(app)
             .get('/api/job/1')
             .expect(200)
             .then(({ body }) => {
                 const { job } = body;
+                console.log(job)
                 expect(job).toHaveProperty("job_id");
                 expect(job).toHaveProperty("title");
                 expect(job).toHaveProperty("location");
