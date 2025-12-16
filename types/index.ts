@@ -26,6 +26,7 @@ export type Job = {
     type?: string,
     company_id?: number,
     description?: string,
+    skills?: [{ skills_name: string }]
 }
 
 export type User = {
