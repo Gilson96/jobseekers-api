@@ -14,7 +14,12 @@ export const create = ({ title, location, pay, type, company_id, description }: 
 };
 
 export const findAll = () => {
-    return db.query(`SELECT * FROM job;`).then(({ rows }: { rows: Job[] }) => {
+    return db.query(`
+        SELECT job.*, company.company_name, company.company_id 
+        FROM job 
+        LEFT JOIN company 
+        ON job.company_id = company.company_id;`
+    ).then(({ rows }: { rows: Job[] }) => {
         return rows;
     });
 };
@@ -52,11 +57,15 @@ export const deleteId = (job_id: number) => {
         });
 };
 
-// export const search = (title: string) => {
-//     const findJob = format(`SELECT job_id, title FROM job WHERE title ILIKE '%${job_title}%';`)
+export const search = (job_title = '', company_name = '') => {
+    const findJob = format(`
+        SELECT job.*, company_name 
+        FROM job 
+        LEFT JOIN company ON job.company_id = company.company_id
+        WHERE title ILIKE '%${job_title}%' OR company.company_name ILIKE '%${company_name}%';`
+    )
 
-//     return db.query(findSkills).then(({ rows }) => {
-//         console.log(rows)
-//         return rows
-//     })
-// };
+    return db.query(findJob).then(({ rows }) => {
+        return rows
+    })
+};

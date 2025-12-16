@@ -1,7 +1,7 @@
-import { create, findAll, findId, update, deleteId } from "../models/job.js"
+import { create, findAll, findId, update, deleteId, search } from "../models/job.js"
 import type { Job } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
-import type { Request, Response } from "express";
+import type { Request, Response, } from "express";
 
 export const createJob = (req: Request, res: Response) => {
     const { title }: { title: string } = req.body;
@@ -116,4 +116,16 @@ export const deleteJob = (req: Request, res: Response) => {
             });
         }
     })
+};
+
+export const searchJob = (req: Request, res: Response) => {
+    const job_title = req.query.job_title
+    const company_name = req.query.company_name
+
+    return search(job_title as string, company_name as string).then((job) => {
+        if (job.length === 0) {
+            return res.status(404).send({ msg: 'No job found' });
+        }
+        return res.status(200).send(job);
+    });
 };
