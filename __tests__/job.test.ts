@@ -50,6 +50,101 @@ describe('GET /api/job', () => {
     })
 });
 
+describe('GET /api/job/search?', () => {
+    it("should respond with 404 when query don't match any job", () => {
+        return request(app)
+            .get('/api/job/search?job_title=Brave&company_name=Brave')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('No job found')
+            })
+    })
+    it("should respond with 200 and all jobs when no input", () => {
+        return request(app)
+            .get('/api/job/search?job_title=&company_name=')
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body)).toBe(true);
+                const job: Job[] = body;
+                job.forEach((job) => {
+                    expect(job).toHaveProperty("job_id");
+                    expect(job).toHaveProperty("title");
+                    expect(job).toHaveProperty("location");
+                    expect(job).toHaveProperty("pay");
+                    expect(job).toHaveProperty("type");
+                    expect(job).toHaveProperty("company_id");
+                    expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("company_name");
+                    expect(typeof job).toBe("object");
+                    expect(typeof job.job_id).toBe("number");
+                    expect(typeof job.title).toBe("string");
+                    expect(typeof job.location).toBe("string");
+                    expect(typeof job.pay).toBe("string");
+                    expect(typeof job.type).toBe("string");
+                    expect(typeof job.company_id).toBe("number");
+                    expect(typeof job.description).toBe("string");
+                    expect(typeof job.company_name).toBe("string");
+                })
+            })
+    })
+    it("should respond with 200 and all jobs matching job_title query", () => {
+        return request(app)
+            .get('/api/job/search?job_title=cleaner&company_name=cleaner')
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body)).toBe(true);
+                const job: Job[] = body;
+                job.forEach((job) => {
+                    expect(job).toHaveProperty("job_id");
+                    expect(job).toHaveProperty("title");
+                    expect(job).toHaveProperty("location");
+                    expect(job).toHaveProperty("pay");
+                    expect(job).toHaveProperty("type");
+                    expect(job).toHaveProperty("company_id");
+                    expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("company_name");
+                    expect(typeof job).toBe("object");
+                    expect(typeof job.job_id).toBe("number");
+                    expect(typeof job.title).toBe("string");
+                    expect(typeof job.location).toBe("string");
+                    expect(typeof job.pay).toBe("string");
+                    expect(typeof job.type).toBe("string");
+                    expect(typeof job.company_id).toBe("number");
+                    expect(typeof job.description).toBe("string");
+                    expect(typeof job.company_name).toBe("string");
+                })
+            })
+    })
+    it("should respond with 200 and all jobs matching company_name query", () => {
+        return request(app)
+            .get('/api/job/search?job_title=talentbridge&company_name=talentbridge')
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body)).toBe(true);
+                const job: Job[] = body;
+                job.forEach((job) => {
+                    expect(job).toHaveProperty("job_id");
+                    expect(job).toHaveProperty("title");
+                    expect(job).toHaveProperty("location");
+                    expect(job).toHaveProperty("pay");
+                    expect(job).toHaveProperty("type");
+                    expect(job).toHaveProperty("company_id");
+                    expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("company_name");
+                    expect(typeof job).toBe("object");
+                    expect(typeof job.job_id).toBe("number");
+                    expect(typeof job.title).toBe("string");
+                    expect(typeof job.location).toBe("string");
+                    expect(typeof job.pay).toBe("string");
+                    expect(typeof job.type).toBe("string");
+                    expect(typeof job.company_id).toBe("number");
+                    expect(typeof job.description).toBe("string");
+                    expect(typeof job.company_name).toBe("string");
+                })
+            })
+    })
+});
+
 describe("GET /api/job/:job_id", () => {
     it("should respond with 400 when invalid params", () => {
         return request(app)
