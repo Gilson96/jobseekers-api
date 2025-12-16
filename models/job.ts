@@ -26,7 +26,14 @@ export const findAll = () => {
 
 export const findId = (job_id: number) => {
     return db
-        .query(`SELECT * FROM job WHERE job.job_id = $1;`, [job_id])
+        .query(` SELECT job.*, company_name,
+        ARRAY_AGG(DISTINCT skills.skills_name) AS skills
+        FROM job
+        LEFT JOIN company ON job.company_id = company.company_id
+        LEFT JOIN skills_job ON skills_job.job_id = job.job_id
+        LEFT JOIN skills ON skills.skills_id = skills_job.skills_id
+        WHERE job.job_id = $1
+        GROUP BY job.job_id, company.company_name`, [job_id])
         .then(({ rows }: { rows: Job[] }) => {
             return rows;
         });
@@ -57,12 +64,19 @@ export const deleteId = (job_id: number) => {
         });
 };
 
-export const search = (job_title = '', company_name = '') => {
+export const search = (job_title = '', company_name = '', skills_name = '') => {
     const findJob = format(`
-        SELECT job.*, company_name 
-        FROM job 
+        SELECT job.*, company_name,
+        ARRAY_AGG(DISTINCT skills.skills_name) AS skills
+        FROM job
         LEFT JOIN company ON job.company_id = company.company_id
-        WHERE title ILIKE '%${job_title}%' OR company.company_name ILIKE '%${company_name}%';`
+        LEFT JOIN skills_job ON skills_job.job_id = job.job_id
+        LEFT JOIN skills ON skills.skills_id = skills_job.skills_id
+        WHERE title ILIKE '%${job_title}%' 
+        OR company.company_name ILIKE '%${company_name}%'
+        OR skills.skills_name ILIKE '%${skills_name}%'
+        GROUP BY job.job_id, company.company_name
+        ;`
     )
 
     return db.query(findJob).then(({ rows }) => {

@@ -11,6 +11,7 @@ export const createJob = (req: Request, res: Response) => {
     const { company_id }: { company_id: number } = req.body;
     const { description }: { description: string } = req.body;
 
+
     const field = Object.keys(req.body);
     const value = Object.values(req.body);
 
@@ -121,8 +122,9 @@ export const deleteJob = (req: Request, res: Response) => {
 export const searchJob = (req: Request, res: Response) => {
     const job_title = req.query.job_title
     const company_name = req.query.company_name
+    const skills_name = req.query.skills_name
 
-    return search(job_title as string, company_name as string).then((job) => {
+    return search(job_title as string, company_name as string, skills_name as string).then((job) => {
         if (job.length === 0) {
             return res.status(404).send({ msg: 'No job found' });
         }
