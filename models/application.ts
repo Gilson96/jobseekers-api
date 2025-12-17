@@ -12,30 +12,3 @@ export const create = (job_id: number, user_id: number) => {
         });
 };
 
-export const findAll = () => {
-    return db.query(`SELECT * FROM application`).then(({ rows }: { rows: Application[] }) => {
-        return rows;
-    });
-};
-
-export const findId = (application_id: number) => {
-    return db
-        .query(`SELECT * FROM application WHERE application_id = $1;`, [
-            application_id,
-        ])
-        .then(({ rows }: { rows: Application[] }) => {
-            return rows;
-        });
-}
-
-export const deleteId = (application_id: number) => {
-    return db
-        .query(`DELETE FROM application WHERE application_id = $1;`, [
-            application_id,
-        ])
-        .then(({ rows }: { rows: Application[] }) => {
-            return rows;
-        });
-};
-
-

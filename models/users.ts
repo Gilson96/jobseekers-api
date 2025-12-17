@@ -12,12 +12,6 @@ export const create = ({ name, email, password, number, address, cv }: User) => 
         });
 };
 
-export const findAll = () => {
-    return db.query(`SELECT * FROM users;`).then(({ rows }: { rows: User[] }) => {
-        return rows;
-    });
-};
-
 export const findOne = (user_id?: number, email?: string) => {
     if (user_id === undefined) {
         return db
@@ -27,7 +21,23 @@ export const findOne = (user_id?: number, email?: string) => {
             });
     } else {
         return db
-            .query(`SELECT * FROM users WHERE user_id = $1;`, [user_id])
+            .query(`SELECT users.*,
+                ARRAY_AGG(DISTINCT skills.skills_name) AS skills,
+                ARRAY_AGG(DISTINCT jsonb_build_object( 
+                'job_id',job.job_id, 
+                'title', job.title,
+                'location', job.location,
+                'company_name', company.company_name
+                )) AS jobs_applied
+                FROM users
+                LEFT JOIN skills_user ON skills_user.user_id = users.user_id
+                LEFT JOIN skills ON skills.skills_id = skills_user.skills_id
+                LEFT JOIN application_user ON application_user.user_id = users.user_id
+                LEFT JOIN application ON application.user_id = application_user.user_id
+                LEFT JOIN job ON job.job_id = application.job_id
+                LEFT JOIN company ON company.company_id = job.company_id
+                WHERE users.user_id = $1
+                GROUP BY users.user_id;`, [user_id])
             .then(({ rows }: { rows: User[] }) => {
                 return rows;
             });

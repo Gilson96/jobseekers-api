@@ -10,12 +10,6 @@ export const create = ({ company_name, email, password, number, address }: Compa
         });
 };
 
-export const findAll = () => {
-    return db.query(`SELECT * FROM company;`).then(({ rows }: { rows: Company[] }) => {
-        return rows;
-    });
-};
-
 export const findOne = (company_id?: number, email?: string) => {
     if (company_id === undefined) {
         return db
@@ -25,7 +19,18 @@ export const findOne = (company_id?: number, email?: string) => {
             });
     } else {
         return db
-            .query(`SELECT * FROM company WHERE company_id = $1;`, [company_id])
+            .query(`
+                SELECT company.company_id,company.company_name,company.email,
+                company.number, company.address,
+                ARRAY_AGG(DISTINCT jsonb_build_object( 
+                'job_id',job.job_id, 
+                'title', job.title,
+                'location', job.location)) 
+                AS jobs_posted
+                FROM company 
+                LEFT JOIN job ON job.company_id = company.company_id 
+                WHERE company.company_id = $1
+                GROUP BY company.company_id;`, [company_id])
             .then(({ rows }: { rows: Company[] }) => {
                 return rows;
             });

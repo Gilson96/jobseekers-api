@@ -12,8 +12,17 @@ export const create = (application_id: number, job_id: number) => {
         });
 };
 
-export const findId = (job_id: number) => {
-    return db.query(`SELECT * FROM application_job WHERE job_id = $1;`, [job_id])
+export const findAll = (job_id: number) => {
+    return db
+        .query(` 
+            SELECT application_job.*, users.user_id, users.name, users.email,
+            users.number, users.address, users.cv
+            FROM application_job
+            LEFT JOIN job ON job.job_id = application_job.job_id
+            LEFT JOIN application ON application.job_id = application_job.job_id
+            LEFT JOIN users ON application.user_id = users.user_id
+            WHERE job.job_id = $1;`, [job_id]
+        )
         .then(({ rows }: { rows: Application_job[] }) => {
             return rows;
         });

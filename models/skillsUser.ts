@@ -12,9 +12,3 @@ export const create = (skills_id: number, user_id: number) => {
         });
 };
 
-export const findId = (user_id: number) => {
-    return db.query(`SELECT * FROM skills_user WHERE user_id = $1;`, [user_id])
-        .then(({ rows }: { rows: Skills_user[] }) => {
-            return rows;
-        });
-};

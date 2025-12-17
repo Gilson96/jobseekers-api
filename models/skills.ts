@@ -15,14 +15,6 @@ export const findAll = () => {
     });
 };
 
-export const findId = (skills_id: number) => {
-    return db
-        .query(`SELECT * FROM skills WHERE skills_id = $1;`, [skills_id])
-        .then(({ rows }: { rows: Skills[] }) => {
-            return rows;
-        });
-};
-
 export const update = (skills_name: string, skills_id: number) => {
     return db
         .query(

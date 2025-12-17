@@ -26,7 +26,7 @@ export const findAll = () => {
 
 export const findId = (job_id: number) => {
     return db
-        .query(` SELECT job.*, company_name,
+        .query(`SELECT job.*, company_name,
         ARRAY_AGG(DISTINCT skills.skills_name) AS skills
         FROM job
         LEFT JOIN company ON job.company_id = company.company_id
@@ -78,7 +78,6 @@ export const search = (job_title = '', company_name = '', skills_name = '') => {
         GROUP BY job.job_id, company.company_name
         ;`
     )
-
     return db.query(findJob).then(({ rows }) => {
         return rows
     })
