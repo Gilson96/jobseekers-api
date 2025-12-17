@@ -1,19 +1,19 @@
 import { create, findAll, findId, update, deleteId, search } from "../models/job.js"
-import type { Job } from "../types/index.js";
+import type { AuthRequest, Job } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response, } from "express";
 
-export const createJob = (req: Request, res: Response) => {
+export const createJob = (req: AuthRequest, res: Response) => {
     const { title }: { title: string } = req.body;
     const { location }: { location: string } = req.body;
     const { pay }: { pay: string } = req.body;
     const { type }: { type: string } = req.body;
     const { company_id }: { company_id: number } = req.body;
-    const { description }: { description: string } = req.body;
+    const { description }: { description: { about_us: '', job_details: '', requirements: '', shift_pattern: '' } } = req.body;
 
+    const role = req.user?.role
 
     const field = Object.keys(req.body);
-    const value = Object.values(req.body);
 
     const requiredFields = [
         "title",
@@ -24,13 +24,24 @@ export const createJob = (req: Request, res: Response) => {
         "description",
     ];
 
+    if (role !== 'admin') {
+        return res.status(401).send({ msg: 'No access to account' })
+    }
+
     for (let i = 0; i < field.length; i++) {
         if (field[i] !== requiredFields[i]) {
             return res.status(400).send({ msg: `invalid ${field[i]} field` });
         }
-        if (typeof value[i] !== "string" && typeof value[i] !== "number") {
-            return res.status(400).send({ msg: `invalid ${field[i]} value` });
-        }
+    }
+
+    if (typeof title !== "string" ||
+        typeof location !== 'string' ||
+        typeof pay !== 'string' ||
+        typeof type !== 'string' ||
+        typeof company_id !== 'number' ||
+        typeof description !== 'object'
+    ) {
+        return res.status(400).send({ msg: `invalid value` });
     }
 
     return checkIfExists("company", "company_id", company_id).then((result) => {
@@ -43,7 +54,7 @@ export const createJob = (req: Request, res: Response) => {
                 }
             );
         }
-    });
+    })
 };
 
 export const findAllJobs = (req: Request, res: Response) => {
@@ -67,19 +78,25 @@ export const findJobById = (req: Request, res: Response) => {
     });
 };
 
-export const updateJob = (req: Request, res: Response) => {
+export const updateJob = (req: AuthRequest, res: Response) => {
     const job_id = req.params.job_id!;
     const { title }: { title: string } = req.body;
     const { location }: { location: string } = req.body;
     const { pay }: { pay: string } = req.body;
     const { type }: { type: string } = req.body;
-    const { description }: { description: string } = req.body;
+    const { description }: { description: { about_us: '', job_details: '', requirements: '', shift_pattern: '' } } = req.body;
 
     const field = req.body!;
+    const role = req.user?.role
+
     const fieldToUpdate = Object.keys(field)!;
     const value = Object.values(field)!;
 
     const allowedFields = ["title", "location", "pay", "type", "description"];
+
+    if (role !== 'admin') {
+        return res.status(401).send({ msg: 'No access to account' })
+    }
 
     for (let i = 0; i < fieldToUpdate.length; i++) {
         if (!allowedFields.includes(fieldToUpdate[i]!)) {
@@ -105,8 +122,13 @@ export const updateJob = (req: Request, res: Response) => {
     });
 };
 
-export const deleteJob = (req: Request, res: Response) => {
+export const deleteJob = (req: AuthRequest, res: Response) => {
     const job_id = req.params.job_id!;
+    const role = req.user?.role
+
+    if (role !== 'admin') {
+        return res.status(401).send({ msg: 'No access to account' })
+    }
 
     return checkIfExists('job', 'job_id', job_id).then((result) => {
         if (!result) {

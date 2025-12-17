@@ -1,4 +1,4 @@
-import { create, findId } from "../models/skillsUser.js";
+import { create } from "../models/skillsUser.js";
 import type { Skills_user } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
@@ -27,20 +27,4 @@ export const createSkillsUser = (req: Request, res: Response) => {
             });
         }
     });
-};
-
-export const findIdSkillsUser = (req: Request, res: Response) => {
-    const user_id = req.params.user_id!;
-
-    return checkIfExists("users", "user_id", user_id).then(
-        (result) => {
-            if (!result) {
-                return res.status(404).send({ msg: "User not found" });
-            } else {
-                return findId(Number(user_id)).then((skills_user: Skills_user[]) => {
-                    return res.status(200).send({ skills_user: skills_user[0] });
-                });
-            }
-        }
-    );
 };

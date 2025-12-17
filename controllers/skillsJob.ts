@@ -1,4 +1,4 @@
-import { create, findId } from "../models/skillsJob.js";
+import { create } from "../models/skillsJob.js";
 import type { Skills_job } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
@@ -27,20 +27,4 @@ export const createSkillsJob = (req: Request, res: Response) => {
             });
         }
     });
-};
-
-export const findIdSkillsJob = (req: Request, res: Response) => {
-    const job_id = req.params.job_id!;
-
-    return checkIfExists("job", "job_id", job_id).then(
-        (result) => {
-            if (!result) {
-                return res.status(404).send({ msg: "job not found" });
-            } else {
-                return findId(Number(job_id)).then((skills_job: Skills_job[]) => {
-                    return res.status(200).send({ skills_job: skills_job[0] });
-                });
-            }
-        }
-    );
 };

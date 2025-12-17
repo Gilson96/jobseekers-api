@@ -40,6 +40,9 @@ export const createUser = (req: Request, res: Response) => {
             return res.status(400).send({ msg: "User email already exists" });
         } else {
             return bcrypt.hash(password, saltRounds, (err, password) => {
+                if (err) {
+                    return res.status(400).send({ msg: err })
+                }
                 create({ name, email, password, number, address, cv })
                     .then((user) => {
                         return res.status(201).send({

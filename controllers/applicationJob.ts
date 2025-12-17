@@ -1,5 +1,5 @@
-import { create, findId } from "../models/applicationJob.js";
-import type { Application_job } from "../types/index.js";
+import { create, findAll } from "../models/applicationJob.js";
+import type { Application_job, AuthRequest } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 
@@ -29,18 +29,22 @@ export const createApplicationJob = (req: Request, res: Response) => {
     });
 };
 
-export const findIdApplicationJob = (req: Request, res: Response) => {
-    const job_id = req.params.job_id!;
+export const findAllApplicationJob = (req: AuthRequest, res: Response) => {
+    const job_id = req.params.job_id!
+    const role = req.user?.role
 
-    return checkIfExists("job", "job_id", job_id).then(
-        (result) => {
-            if (!result) {
-                return res.status(404).send({ msg: "Job not found" });
-            } else {
-                return findId(Number(job_id)).then((application_job: Application_job[]) => {
-                    return res.status(200).send({ application_job: application_job[0] });
-                });
-            }
+    if (role !== 'admin') {
+        return res.status(401).send({ msg: 'No access to account' })
+    }
+
+    return checkIfExists("job", "job_id", job_id).then((results) => {
+        if (!results) {
+            return res.status(404).send({ msg: "Application not found" });
+        } else {
+            return findAll(Number(job_id)).then((application_job: Application_job[]) => {
+                return res.status(200).send(application_job);
+            });
         }
-    );
+    });
 };
+
