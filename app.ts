@@ -12,6 +12,9 @@ import skillsUserRouter from './routes/skillsUser.js'
 import skillsJobRouter from './routes/skillsJob.js'
 import savedJobRouter from './routes/saved_job.js'
 import { login } from './controllers/login.js'
+import { serve, setup } from 'swagger-ui-express'
+import * as swaggerJSDoc from 'swagger-jsdoc'
+import * as swaggerUI from 'swagger-ui-express'
 
 const app = express()
 
@@ -20,8 +23,26 @@ app.use(express.json())
 
 const apiRouter = express.Router()
 
+const options: swaggerJSDoc.OAS3Options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Jobseekers',
+            description: 'An API with RESTful routes, authentication for the Jobseekers full-stack application.',
+            version: '1.0.0'
+        },
+        servers: [
+            { url: 'http://localhost:9090/' }
+        ]
+    },
+    apis: ['./app.ts']
+}
+
+const spec = swaggerJSDoc.default(options)
 
 app.use("/api", apiRouter)
+
+apiRouter.use('/api-docs', swaggerUI.serve, swaggerUI.setup(spec));
 
 apiRouter.use("/login", login)
 apiRouter.use("/job", jobRouter)
