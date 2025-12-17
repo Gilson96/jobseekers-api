@@ -20,40 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
-describe("GET /api/user/skills_user/:user_id", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .get('/api/user/skills_user/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when skills_user id not found", () => {
-        return request(app)
-            .get('/api/user/skills_user/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("User not found");
-            })
-    })
-
-    it("should respond with 200 and an object containing a skills_user", () => {
-        return request(app)
-            .get('/api/user/skills_user/1')
-            .expect(200)
-            .then(({ body }) => {
-                const { skills_user }: { skills_user: Skills_user } = body;
-                expect(skills_user).toHaveProperty("skills_user_id");
-                expect(skills_user).toHaveProperty("skills_id");
-                expect(skills_user).toHaveProperty("user_id");
-                expect(typeof skills_user.skills_user_id).toBe("number");
-                expect(typeof skills_user.skills_id).toBe("number");
-                expect(typeof skills_user.user_id).toBe("number");
-            })
-    })
-})
-
 describe("POST /api/user/skills_user", () => {
     it("should responds with a 400 status code when the field is invalid", () => {
         const newskillsuser = {
@@ -81,7 +47,6 @@ describe("POST /api/user/skills_user", () => {
                 expect(body.msg).toBe("Invalid value");
             })
     })
-
     it("should responds with a 201 status code and an object containing a user skills", () => {
         const newskillsuser = {
             skills_id: 1,

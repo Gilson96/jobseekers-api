@@ -20,6 +20,8 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
+let token: string
+
 describe('GET /api/job', () => {
     it("should respond with 200 and an array of jobs", () => {
         return request(app)
@@ -36,6 +38,11 @@ describe('GET /api/job', () => {
                     expect(job).toHaveProperty("type");
                     expect(job).toHaveProperty("company_id");
                     expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("description.about_us");
+                    expect(job).toHaveProperty("description.job_details");
+                    expect(job).toHaveProperty("description.requirements");
+                    expect(job).toHaveProperty("description.shift_pattern");
+                    expect(job).toHaveProperty("company_name");
                     expect(typeof job).toBe("object");
                     expect(typeof job.job_id).toBe("number");
                     expect(typeof job.title).toBe("string");
@@ -43,7 +50,11 @@ describe('GET /api/job', () => {
                     expect(typeof job.pay).toBe("string");
                     expect(typeof job.type).toBe("string");
                     expect(typeof job.company_id).toBe("number");
-                    expect(typeof job.description).toBe("string");
+                    expect(typeof job.description).toBe("object");
+                    expect(typeof job.description?.about_us).toBe("string");
+                    expect(typeof job.description?.job_details).toBe("string");
+                    expect(typeof job.description?.requirements).toBe("string");
+                    expect(typeof job.description?.shift_pattern).toBe("string");
                 })
 
             })
@@ -53,7 +64,7 @@ describe('GET /api/job', () => {
 describe('GET /api/job/search?', () => {
     it("should respond with 404 when query don't match any job", () => {
         return request(app)
-            .get('/api/job/search?job_title=Brave&company_name=Brave')
+            .get('/api/job/search?job_title=Brave&company_name=Brave&skills_name=TalentBridge')
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe('No job found')
@@ -61,7 +72,7 @@ describe('GET /api/job/search?', () => {
     })
     it("should respond with 200 and all jobs when no input", () => {
         return request(app)
-            .get('/api/job/search?job_title=&company_name=')
+            .get('/api/job/search?job_title=&company_name=&skills_name=')
             .expect(200)
             .then(({ body }) => {
                 expect(Array.isArray(body)).toBe(true);
@@ -74,6 +85,10 @@ describe('GET /api/job/search?', () => {
                     expect(job).toHaveProperty("type");
                     expect(job).toHaveProperty("company_id");
                     expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("description.about_us");
+                    expect(job).toHaveProperty("description.job_details");
+                    expect(job).toHaveProperty("description.requirements");
+                    expect(job).toHaveProperty("description.shift_pattern");
                     expect(job).toHaveProperty("company_name");
                     expect(typeof job).toBe("object");
                     expect(typeof job.job_id).toBe("number");
@@ -82,40 +97,15 @@ describe('GET /api/job/search?', () => {
                     expect(typeof job.pay).toBe("string");
                     expect(typeof job.type).toBe("string");
                     expect(typeof job.company_id).toBe("number");
-                    expect(typeof job.description).toBe("string");
-                    expect(typeof job.company_name).toBe("string");
+                    expect(typeof job.description).toBe("object");
+                    expect(typeof job.description?.about_us).toBe("string");
+                    expect(typeof job.description?.job_details).toBe("string");
+                    expect(typeof job.description?.requirements).toBe("string");
+                    expect(typeof job.description?.shift_pattern).toBe("string");
                 })
             })
     })
     it("should respond with 200 and all jobs matching job_title query", () => {
-        return request(app)
-            .get('/api/job/search?job_title=cleaner&company_name=cleaner')
-            .expect(200)
-            .then(({ body }) => {
-                expect(Array.isArray(body)).toBe(true);
-                const job: Job[] = body;
-                job.forEach((job) => {
-                    expect(job).toHaveProperty("job_id");
-                    expect(job).toHaveProperty("title");
-                    expect(job).toHaveProperty("location");
-                    expect(job).toHaveProperty("pay");
-                    expect(job).toHaveProperty("type");
-                    expect(job).toHaveProperty("company_id");
-                    expect(job).toHaveProperty("description");
-                    expect(job).toHaveProperty("company_name");
-                    expect(typeof job).toBe("object");
-                    expect(typeof job.job_id).toBe("number");
-                    expect(typeof job.title).toBe("string");
-                    expect(typeof job.location).toBe("string");
-                    expect(typeof job.pay).toBe("string");
-                    expect(typeof job.type).toBe("string");
-                    expect(typeof job.company_id).toBe("number");
-                    expect(typeof job.description).toBe("string");
-                    expect(typeof job.company_name).toBe("string");
-                })
-            })
-    })
-    it("should respond with 200 and all jobs matching company_name query", () => {
         return request(app)
             .get('/api/job/search?job_title=cleaner&company_name=cleaner&skills_name=cleaner')
             .expect(200)
@@ -123,7 +113,6 @@ describe('GET /api/job/search?', () => {
                 expect(Array.isArray(body)).toBe(true);
                 const job: Job[] = body;
                 job.forEach((job) => {
-                    console.log(job)
                     expect(job).toHaveProperty("job_id");
                     expect(job).toHaveProperty("title");
                     expect(job).toHaveProperty("location");
@@ -131,6 +120,10 @@ describe('GET /api/job/search?', () => {
                     expect(job).toHaveProperty("type");
                     expect(job).toHaveProperty("company_id");
                     expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("description.about_us");
+                    expect(job).toHaveProperty("description.job_details");
+                    expect(job).toHaveProperty("description.requirements");
+                    expect(job).toHaveProperty("description.shift_pattern");
                     expect(job).toHaveProperty("company_name");
                     expect(typeof job).toBe("object");
                     expect(typeof job.job_id).toBe("number");
@@ -139,8 +132,46 @@ describe('GET /api/job/search?', () => {
                     expect(typeof job.pay).toBe("string");
                     expect(typeof job.type).toBe("string");
                     expect(typeof job.company_id).toBe("number");
-                    expect(typeof job.description).toBe("string");
-                    expect(typeof job.company_name).toBe("string");
+                    expect(typeof job.description).toBe("object");
+                    expect(typeof job.description?.about_us).toBe("string");
+                    expect(typeof job.description?.job_details).toBe("string");
+                    expect(typeof job.description?.requirements).toBe("string");
+                    expect(typeof job.description?.shift_pattern).toBe("string");
+                })
+            })
+    })
+    it("should respond with 200 and all jobs matching company_name query", () => {
+        return request(app)
+            .get('/api/job/search?job_title=TalentBridge&company_name=TalentBridge&skills_name=TalentBridge')
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body)).toBe(true);
+                const job: Job[] = body;
+                job.forEach((job) => {
+                    expect(job).toHaveProperty("job_id");
+                    expect(job).toHaveProperty("title");
+                    expect(job).toHaveProperty("location");
+                    expect(job).toHaveProperty("pay");
+                    expect(job).toHaveProperty("type");
+                    expect(job).toHaveProperty("company_id");
+                    expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("description.about_us");
+                    expect(job).toHaveProperty("description.job_details");
+                    expect(job).toHaveProperty("description.requirements");
+                    expect(job).toHaveProperty("description.shift_pattern");
+                    expect(job).toHaveProperty("company_name");
+                    expect(typeof job).toBe("object");
+                    expect(typeof job.job_id).toBe("number");
+                    expect(typeof job.title).toBe("string");
+                    expect(typeof job.location).toBe("string");
+                    expect(typeof job.pay).toBe("string");
+                    expect(typeof job.type).toBe("string");
+                    expect(typeof job.company_id).toBe("number");
+                    expect(typeof job.description).toBe("object");
+                    expect(typeof job.description?.about_us).toBe("string");
+                    expect(typeof job.description?.job_details).toBe("string");
+                    expect(typeof job.description?.requirements).toBe("string");
+                    expect(typeof job.description?.shift_pattern).toBe("string");
                 })
             })
     })
@@ -152,7 +183,6 @@ describe('GET /api/job/search?', () => {
                 expect(Array.isArray(body)).toBe(true);
                 const job: Job[] = body;
                 job.forEach((job) => {
-                    console.log(job)
                     expect(job).toHaveProperty("job_id");
                     expect(job).toHaveProperty("title");
                     expect(job).toHaveProperty("location");
@@ -160,6 +190,10 @@ describe('GET /api/job/search?', () => {
                     expect(job).toHaveProperty("type");
                     expect(job).toHaveProperty("company_id");
                     expect(job).toHaveProperty("description");
+                    expect(job).toHaveProperty("description.about_us");
+                    expect(job).toHaveProperty("description.job_details");
+                    expect(job).toHaveProperty("description.requirements");
+                    expect(job).toHaveProperty("description.shift_pattern");
                     expect(job).toHaveProperty("company_name");
                     expect(typeof job).toBe("object");
                     expect(typeof job.job_id).toBe("number");
@@ -168,8 +202,11 @@ describe('GET /api/job/search?', () => {
                     expect(typeof job.pay).toBe("string");
                     expect(typeof job.type).toBe("string");
                     expect(typeof job.company_id).toBe("number");
-                    expect(typeof job.description).toBe("string");
-                    expect(typeof job.company_name).toBe("string");
+                    expect(typeof job.description).toBe("object");
+                    expect(typeof job.description?.about_us).toBe("string");
+                    expect(typeof job.description?.job_details).toBe("string");
+                    expect(typeof job.description?.requirements).toBe("string");
+                    expect(typeof job.description?.shift_pattern).toBe("string");
                 })
             })
     })
@@ -192,13 +229,12 @@ describe("GET /api/job/:job_id", () => {
                 expect(body.msg).toBe("Job not found");
             })
     })
-    it.only("should respond with 200 and an object containing a job", () => {
+    it("should respond with 200 and an object containing a job", () => {
         return request(app)
             .get('/api/job/1')
             .expect(200)
             .then(({ body }) => {
                 const { job } = body;
-                console.log(job)
                 expect(job).toHaveProperty("job_id");
                 expect(job).toHaveProperty("title");
                 expect(job).toHaveProperty("location");
@@ -206,6 +242,11 @@ describe("GET /api/job/:job_id", () => {
                 expect(job).toHaveProperty("type");
                 expect(job).toHaveProperty("company_id");
                 expect(job).toHaveProperty("description");
+                expect(job).toHaveProperty("description.about_us");
+                expect(job).toHaveProperty("description.job_details");
+                expect(job).toHaveProperty("description.requirements");
+                expect(job).toHaveProperty("description.shift_pattern");
+                expect(job).toHaveProperty("company_name");
                 expect(typeof job).toBe("object");
                 expect(typeof job.job_id).toBe("number");
                 expect(typeof job.title).toBe("string");
@@ -213,22 +254,39 @@ describe("GET /api/job/:job_id", () => {
                 expect(typeof job.pay).toBe("string");
                 expect(typeof job.type).toBe("string");
                 expect(typeof job.company_id).toBe("number");
-                expect(typeof job.description).toBe("string");
+                expect(typeof job.description).toBe("object");
+                expect(typeof job.description?.about_us).toBe("string");
+                expect(typeof job.description?.job_details).toBe("string");
+                expect(typeof job.description?.requirements).toBe("string");
+                expect(typeof job.description?.shift_pattern).toBe("string");
             })
     })
 })
 
 describe("PATCH /api/job/:job_id", () => {
     it("should respond with 400 when invalid params", () => {
+        const login = {
+            email: "vertextalent@company.com",
+            password: "company123",
+        }
         const updatedJob = {
             title: 'new title',
             location: 'address'
         }
         return request(app)
-            .patch('/api/job/not-valid')
-            .send(updatedJob)
-            .expect(400)
-            .then(({ body }) => { expect(body.msg).toBe("Invalid params") })
+            .post('/api/login')
+            .send(login)
+            .expect(200)
+            .then((body) => {
+                token = body.body.token
+            }).then(() => {
+                return request(app)
+                    .patch('/api/job/not-valid')
+                    .auth(token, { type: 'bearer' })
+                    .send(updatedJob)
+                    .expect(400)
+                    .then(({ body }) => { expect(body.msg).toBe("Invalid params") })
+            })
     })
     it("should respond with a 400 when invalid field", () => {
         const updatedJob = {
@@ -237,6 +295,7 @@ describe("PATCH /api/job/:job_id", () => {
         }
         return request(app)
             .patch('/api/job/1')
+            .auth(token, { type: 'bearer' })
             .send(updatedJob)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -248,6 +307,7 @@ describe("PATCH /api/job/:job_id", () => {
         }
         return request(app)
             .patch('/api/job/1')
+            .auth(token, { type: 'bearer' })
             .send(updatedJob)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -259,6 +319,7 @@ describe("PATCH /api/job/:job_id", () => {
         }
         return request(app)
             .patch('/api/job/999')
+            .auth(token, { type: 'bearer' })
             .send(updatedJob)
             .expect(404)
             .then(({ body }) => {
@@ -272,10 +333,11 @@ describe("PATCH /api/job/:job_id", () => {
         }
         return request(app)
             .patch('/api/job/1')
+            .auth(token, { type: 'bearer' })
             .send(updatedJob)
             .expect(200)
             .then(({ body }) => {
-                const { job } = body;
+                const { job }: { job: Job } = body;
                 expect(job).toHaveProperty("job_id");
                 expect(job).toHaveProperty("title");
                 expect(job).toHaveProperty("location");
@@ -283,6 +345,10 @@ describe("PATCH /api/job/:job_id", () => {
                 expect(job).toHaveProperty("type");
                 expect(job).toHaveProperty("company_id");
                 expect(job).toHaveProperty("description");
+                expect(job).toHaveProperty("description.about_us");
+                expect(job).toHaveProperty("description.job_details");
+                expect(job).toHaveProperty("description.requirements");
+                expect(job).toHaveProperty("description.shift_pattern");
                 expect(typeof job).toBe("object");
                 expect(typeof job.job_id).toBe("number");
                 expect(typeof job.title).toBe("string");
@@ -290,7 +356,11 @@ describe("PATCH /api/job/:job_id", () => {
                 expect(typeof job.pay).toBe("string");
                 expect(typeof job.type).toBe("string");
                 expect(typeof job.company_id).toBe("number");
-                expect(typeof job.description).toBe("string");
+                expect(typeof job.description).toBe("object");
+                expect(typeof job.description?.about_us).toBe("string");
+                expect(typeof job.description?.job_details).toBe("string");
+                expect(typeof job.description?.requirements).toBe("string");
+                expect(typeof job.description?.shift_pattern).toBe("string");
             })
     })
 })
@@ -303,10 +373,11 @@ describe("POST /api/job", () => {
             money: 'pay',
             type: 'type',
             company_id: 1,
-            description: '',
+            description: {},
         }
         return request(app)
             .post('/api/job')
+            .auth(token, { type: 'bearer' })
             .send(newJob)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -322,6 +393,7 @@ describe("POST /api/job", () => {
         }
         return request(app)
             .post('/api/job')
+            .auth(token, { type: 'bearer' })
             .send(newJob)
             .expect(400)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -333,10 +405,11 @@ describe("POST /api/job", () => {
             pay: 'pay',
             type: 'type',
             company_id: 999,
-            description: '{  }',
+            description: {about_us: '', job_details: '', requirements: '', shift_pattern: ''},
         }
         return request(app)
             .post('/api/job')
+            .auth(token, { type: 'bearer' })
             .send(newJob)
             .expect(404)
             .then(({ body }) => { expect(body.msg).toBe(body.msg) })
@@ -348,10 +421,11 @@ describe("POST /api/job", () => {
             pay: 'pay',
             type: 'type',
             company_id: 1,
-            description: '',
+            description: { about_us: '', job_details: '', requirements: '', shift_pattern: '' },
         }
         return request(app)
             .post('/api/job')
+            .auth(token, { type: 'bearer' })
             .send(newJob)
             .expect(201)
             .then(({ body }) => {
@@ -363,6 +437,10 @@ describe("POST /api/job", () => {
                 expect(job).toHaveProperty("type");
                 expect(job).toHaveProperty("company_id");
                 expect(job).toHaveProperty("description");
+                expect(job).toHaveProperty("description.about_us");
+                expect(job).toHaveProperty("description.job_details");
+                expect(job).toHaveProperty("description.requirements");
+                expect(job).toHaveProperty("description.shift_pattern");
                 expect(typeof job).toBe("object");
                 expect(typeof job.job_id).toBe("number");
                 expect(typeof job.title).toBe("string");
@@ -370,7 +448,11 @@ describe("POST /api/job", () => {
                 expect(typeof job.pay).toBe("string");
                 expect(typeof job.type).toBe("string");
                 expect(typeof job.company_id).toBe("number");
-                expect(typeof job.description).toBe("string");
+                expect(typeof job.description).toBe("object");
+                expect(typeof job.description?.about_us).toBe("string");
+                expect(typeof job.description?.job_details).toBe("string");
+                expect(typeof job.description?.requirements).toBe("string");
+                expect(typeof job.description?.shift_pattern).toBe("string");
             })
     })
 })
@@ -379,6 +461,7 @@ describe("DELETE /api/job", () => {
     it("should respond with 400 when invalid params", () => {
         return request(app)
             .delete('/api/job/not-valid')
+            .auth(token, { type: 'bearer' })
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).toBe("Invalid params");
@@ -387,15 +470,15 @@ describe("DELETE /api/job", () => {
     it("should respond with 404 when user id not found", () => {
         return request(app)
             .delete('/api/job/999')
+            .auth(token, { type: 'bearer' })
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).toBe("Job not found");
             })
     })
     it("should respond with a 204 when job deleted", () => {
-        return request(app).delete('/api/job/1').expect(204)
+        return request(app).delete('/api/job/1').auth(token, { type: 'bearer' }).expect(204)
     })
-
 })
 
 

@@ -82,17 +82,22 @@ describe("GET /api/company/:company_id", () => {
                 expect(company).toHaveProperty("company_id");
                 expect(company).toHaveProperty("company_name");
                 expect(company).toHaveProperty("email");
-                expect(company).toHaveProperty("password");
                 expect(company).toHaveProperty("number");
                 expect(company).toHaveProperty("address");
-                expect(company).toHaveProperty("role");
+                expect(company).toHaveProperty("jobs_posted");
+                expect(company).toHaveProperty("jobs_posted[0].title");
+                expect(company).toHaveProperty("jobs_posted[0].job_id");
+                expect(company).toHaveProperty("jobs_posted[0].location");
                 expect(typeof company).toBe("object");
                 expect(typeof company.company_id).toBe("number");
                 expect(typeof company.company_name).toBe("string");
                 expect(typeof company.email).toBe("string");
-                expect(typeof company.password).toBe("string");
                 expect(typeof company.number).toBe("string");
                 expect(typeof company.address).toBe("string");
+                expect(typeof company.jobs_posted).toBe("object");
+                expect(typeof company.jobs_posted?.[0].title).toBe("string");
+                expect(typeof company.jobs_posted?.[0].job_id).toBe("number");
+                expect(typeof company.jobs_posted?.[0].location).toBe("string");
             })
     })
 })

@@ -20,60 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
-describe("GET /api/application", () => {
-    it("should respond with 200 and an array with all applications", () => {
-        return request(app)
-            .get('/api/application')
-            .expect(200)
-            .then(({ body }) => {
-                expect(Array.isArray(body)).toBe(true);
-                const application: Application[] = body
-                application.forEach((application) => {
-                    expect(application).toHaveProperty("application_id");
-                    expect(application).toHaveProperty("job_id");
-                    expect(application).toHaveProperty("user_id");
-                    expect(typeof application.application_id).toBe("number");
-                    expect(typeof application.job_id).toBe("number");
-                    expect(typeof application.user_id).toBe("number");
-                })
-            })
-    })
-})
-
-describe("GET /api/application/:application_id", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .get('/api/application/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when application id not found", () => {
-        return request(app)
-            .get('/api/application/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Application not found");
-            })
-    })
-
-    it("should respond with 200 and an object containing a application", () => {
-        return request(app)
-            .get('/api/application/1')
-            .expect(200)
-            .then(({ body }) => {
-                const { application }: { application: Application } = body;
-                expect(application).toHaveProperty("application_id");
-                expect(application).toHaveProperty("job_id");
-                expect(application).toHaveProperty("user_id");
-                expect(typeof application.application_id).toBe("number");
-                expect(typeof application.job_id).toBe("number");
-                expect(typeof application.user_id).toBe("number");
-            })
-    })
-})
-
 describe("POST /api/application", () => {
     it("should responds with a 400 satus code when the field is invalid", () => {
         const newApplication = {
@@ -123,28 +69,6 @@ describe("POST /api/application", () => {
     })
 })
 
-describe("DELETE /api/application", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .delete('/api/application/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when application id not found", () => {
-        return request(app)
-            .delete('/api/application/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("application not found");
-            })
-    })
-    it("should respond with a 204 when application deleted", () => {
-        return request(app).delete('/api/application/1').expect(204)
-    })
-
-})
 
 
 

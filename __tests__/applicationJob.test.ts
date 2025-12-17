@@ -20,36 +20,68 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
+let token: string
+
 describe("GET /api/job/application_job/:job_id", () => {
     it("should respond with 400 when invalid params", () => {
+        const login = {
+            email: "vertextalent@company.com",
+            password: "company123",
+        }
         return request(app)
-            .get('/api/job/application_job/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
+            .post('/api/login')
+            .send(login)
+            .expect(200)
+            .then((body) => {
+                token = body.body.token
+            }).then(() => {
+                return request(app)
+                    .get('/api/job/application_job/not-valid')
+                    .auth(token, { type: "bearer" })
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.msg).toBe("Invalid params");
+                    })
             })
     })
     it("should respond with 404 when application_job id not found", () => {
         return request(app)
             .get('/api/job/application_job/999')
+            .auth(token, { type: 'bearer' })
             .expect(404)
             .then(({ body }) => {
-                expect(body.msg).toBe("Job not found");
+                expect(body.msg).toBe("Application not found");
             })
     })
-
     it("should respond with 200 and an object containing a application_job", () => {
         return request(app)
-            .get('/api/job/application_job/1')
+            .get('/api/job/application_job/2')
+            .auth(token, { type: 'bearer' })
             .expect(200)
             .then(({ body }) => {
-                const { application_job }: { application_job: Application_job } = body;
-                expect(application_job).toHaveProperty("application_job_id");
-                expect(application_job).toHaveProperty("application_id");
-                expect(application_job).toHaveProperty("job_id");
-                expect(typeof application_job.application_job_id).toBe("number");
-                expect(typeof application_job.application_id).toBe("number");
-                expect(typeof application_job.job_id).toBe("number");
+                expect(Array.isArray(body)).toBe(true);
+                const application_job: Application_job[] = body;
+                console.log(application_job)
+                application_job.forEach(app_job => {
+                    expect(app_job).toHaveProperty("application_job_id");
+                    expect(app_job).toHaveProperty("application_id");
+                    expect(app_job).toHaveProperty("job_id");
+                    expect(app_job).toHaveProperty("user_id");
+                    expect(app_job).toHaveProperty("name");
+                    expect(app_job).toHaveProperty("email");
+                    expect(app_job).toHaveProperty("number");
+                    expect(app_job).toHaveProperty("address");
+                    expect(app_job).toHaveProperty("cv");
+                    expect(typeof app_job.application_job_id).toBe("number");
+                    expect(typeof app_job.application_id).toBe("number");
+                    expect(typeof app_job.job_id).toBe("number");
+                    expect(typeof app_job.user_id).toBe("number");
+                    expect(typeof app_job.email).toBe("string");
+                    expect(typeof app_job.number).toBe("string");
+                    expect(typeof app_job.address).toBe("string");
+                    expect(typeof app_job.cv).toBe("string");
+                })
+
             })
     })
 })

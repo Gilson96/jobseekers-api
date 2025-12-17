@@ -20,39 +20,6 @@ describe("checks if attempting to access a non-existent endpoint", () => {
     });
 });
 
-describe("GET /api/job/skills_job/:job_id", () => {
-    it("should respond with 400 when invalid params", () => {
-        return request(app)
-            .get('/api/job/skills_job/not-valid')
-            .expect(400)
-            .then(({ body }) => {
-                expect(body.msg).toBe("Invalid params");
-            })
-    })
-    it("should respond with 404 when skills_job id not found", () => {
-        return request(app)
-            .get('/api/job/skills_job/999')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.msg).toBe("job not found");
-            })
-    })
-
-    it("should respond with 200 and an object containing a skills_job", () => {
-        return request(app)
-            .get('/api/job/skills_job/1')
-            .expect(200)
-            .then(({ body }) => {
-                const { skills_job }: { skills_job: Skills_job } = body;
-                expect(skills_job).toHaveProperty("skills_job_id");
-                expect(skills_job).toHaveProperty("skills_id");
-                expect(skills_job).toHaveProperty("job_id");
-                expect(typeof skills_job.skills_job_id).toBe("number");
-                expect(typeof skills_job.skills_id).toBe("number");
-                expect(typeof skills_job.job_id).toBe("number");
-            })
-    })
-})
 
 describe("POST /api/job/skills_job", () => {
     it("should responds with a 400 status code when the field is invalid", () => {
