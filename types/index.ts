@@ -9,7 +9,14 @@ export type Company = {
     password?: string,
     number?: string,
     address?: string,
-    role?: string
+    role?: string,
+    jobs_posted?: [
+        {
+            title: string,
+            job_id: number,
+            location: string
+        }
+    ]
 }
 
 export type Skills = {
@@ -25,7 +32,12 @@ export type Job = {
     pay?: string,
     type?: string,
     company_id?: number,
-    description?: string,
+    description?: {
+        about_us: string,
+        job_details: string,
+        requirements: string,
+        shift_pattern: string
+    },
     skills?: [{ skills_name: string }]
 }
 
@@ -62,19 +74,35 @@ export type Skills_job = {
 export type Application_user = {
     application_user_id?: number,
     application_id?: number,
+    job_id?: number | string,
     user_id?: number
+    title?: string,
+    location?: string,
+    company_name?: string
 }
 
 export type Application_job = {
     application_job_id?: number,
     application_id?: number,
     job_id?: number
+    user_id?: number
+    name?: string,
+    email?: string,
+    number?: string,
+    address?: string,
+    cv?: string
 }
 
 export type Saved_job = {
     saved_job_id?: number,
     user_id?: number,
     job_id?: number,
+    saved_jobs?: [{
+        title: string,
+        job_id: number,
+        location: string,
+        company_name: string
+    }]
 }
 
 export type ErrorHandler = {
