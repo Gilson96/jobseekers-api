@@ -1,9 +1,10 @@
 import express from 'express'
-import { createApplicationJob, findIdApplicationJob } from '../controllers/applicationJob.js'
+import { createApplicationJob, findAllApplicationJob } from '../controllers/applicationJob.js'
+import { checkAuth } from '../middleware/auth.js'
 
 const applicationJobRouter = express.Router()
 
-applicationJobRouter.get("/:job_id", findIdApplicationJob)
 applicationJobRouter.post("/", createApplicationJob)
+applicationJobRouter.get("/:job_id", checkAuth, findAllApplicationJob)
 
 export default applicationJobRouter

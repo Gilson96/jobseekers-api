@@ -1,10 +1,11 @@
 import express from 'express'
 import { createSavedJob, deleteSavedJob, findAllSavedJob } from '../controllers/saved_job.js'
+import { checkAuth } from '../middleware/auth.js'
 
 const savedJobRouter = express.Router()
 
-savedJobRouter.post("/", createSavedJob)
-savedJobRouter.get("/:user_id", findAllSavedJob)
-savedJobRouter.delete("/:saved_job_id", deleteSavedJob)
+savedJobRouter.post("/", checkAuth, createSavedJob)
+savedJobRouter.get("/:user_id", checkAuth, findAllSavedJob)
+savedJobRouter.delete("/:saved_job_id", checkAuth, deleteSavedJob)
 
 export default savedJobRouter
