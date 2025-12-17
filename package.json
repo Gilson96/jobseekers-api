@@ -8,6 +8,7 @@
     "database": "psql -f data/setup_dbs.sql",
     "seed": "npx tsx data/seeding/run-seed.ts",
     "dev": "npx tsx listen.ts",
+    "start": "npx tsx listen.ts",
     "seed-prod": "NODE_ENV=production npm run seed"
   },
   "keywords": [],
