@@ -27,7 +27,7 @@ export const createTables = () => {
           pay VARCHAR(255),
           type VARCHAR(255),
           company_id INTEGER REFERENCES company(company_id) ON DELETE CASCADE,
-          description TEXT
+          description json
           );`);
     })
     .then(() => {

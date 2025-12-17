@@ -17,6 +17,6 @@ export const skills_user = [
     },
     {
         user_id: 1,
-        skills_id: 20,
+        skills_id: 15,
     },
 ]
