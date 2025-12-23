@@ -21,7 +21,7 @@ export const findLoginUser = (
                     { id, email, role },
                     'c_cret_password',
                     {
-                        expiresIn: '1h',
+                        expiresIn: '1d',
                         algorithm: 'HS256'
                     }
                 )
