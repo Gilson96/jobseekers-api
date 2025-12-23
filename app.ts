@@ -15,7 +15,7 @@ import { login } from './controllers/login.js'
 
 const app = express()
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: 'http://localhost:5173', allowedHeaders: '*',  }));
 app.use(express.json())
 
 const apiRouter = express.Router()
