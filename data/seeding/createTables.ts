@@ -60,8 +60,7 @@ export const createTables = () => {
       return db.query(`CREATE TABLE application (
       application_id SERIAL PRIMARY KEY,
       job_id INTEGER REFERENCES job(job_id) ON DELETE CASCADE, 
-      user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-      cv TEXT
+      user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE
     );`);
     })
     .then(() => {
