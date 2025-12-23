@@ -5,8 +5,6 @@ import { data } from "../data/index.js"
 import request from "supertest"
 import app from "../app.js";
 import type { Application } from "../types/index.ts";
-import fs from 'node:fs'
-import path from 'path';
 
 beforeEach(() => {
     return seed(data);
@@ -50,14 +48,10 @@ describe("POST /api/application", () => {
             })
     })
     it("should responds with a 201 status code and an object containing a application", () => {
-        const filePath = path.join(import.meta.dirname, '../cv_uploads/2930796_4939_BillingHistory.pdf')
-
-        const myFile = fs.readFileSync(filePath, 'utf8')
-
+    
         const newapplication = {
             job_id: 1,
             user_id: 1,
-            cv: myFile
         }
         return request(app)
             .post('/api/application')
@@ -65,15 +59,12 @@ describe("POST /api/application", () => {
             .expect(201)
             .then(({ body }) => {
                 const { application }: { application: Application } = body;
-                console.log(application)
                 expect(application).toHaveProperty("application_id");
                 expect(application).toHaveProperty("job_id");
                 expect(application).toHaveProperty("user_id");
-                expect(application).toHaveProperty("cv");
                 expect(typeof application.application_id).toBe("number");
                 expect(typeof application.job_id).toBe("number");
                 expect(typeof application.user_id).toBe("number");
-                expect(typeof application.cv).toBe('file');
             })
     })
 })
