@@ -3,6 +3,7 @@ import type { Application_job, AuthRequest } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 
+
 export const createApplicationJob = (req: Request, res: Response) => {
     const { application_id }: { application_id: number } = req.body;
     const { job_id }: { job_id: number } = req.body;
@@ -48,3 +49,6 @@ export const findAllApplicationJob = (req: AuthRequest, res: Response) => {
     });
 };
 
+export const uploadCVToApplication = (req: Request, res: Response) => {
+
+} 

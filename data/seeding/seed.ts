@@ -112,10 +112,10 @@ export const seed = ({
             })
         }).then(() => {
             const formatApplications = applications.map((application) => {
-                return [application.job_id, application.user_id];
+                return [application.job_id, application.user_id, application.cv];
             });
             const insertIntoApplication = format(
-                `INSERT INTO application (job_id,user_id) VALUES %L RETURNING*;`,
+                `INSERT INTO application (job_id,user_id, cv) VALUES %L RETURNING*;`,
                 formatApplications
             );
             return db.query(insertIntoApplication);
