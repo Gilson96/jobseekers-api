@@ -12,3 +12,14 @@ export const create = (skills_id: number, user_id: number) => {
         });
 };
 
+export const deleteId = (skills_user_id: number) => {
+    return db
+        .query(
+            `DELETE FROM skills_user WHERE skills_user_id = $1 RETURNING *;`,
+            [skills_user_id]
+        )
+        .then(({ rows }: { rows: Skills_user[] }) => {
+            return rows;
+        });
+};
+

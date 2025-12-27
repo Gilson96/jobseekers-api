@@ -1,5 +1,5 @@
-import { create } from "../models/skillsUser.js";
-import type { Skills_user } from "../types/index.js";
+import { create, deleteId } from "../models/skillsUser.js";
+import type { AuthRequest, Skills_user } from "../types/index.js";
 import { checkIfExists } from "../utils/checkIfExists.js";
 import type { Request, Response } from "express";
 
@@ -28,3 +28,24 @@ export const createSkillsUser = (req: Request, res: Response) => {
         }
     });
 };
+
+export const deleteSkillsUser = (req: AuthRequest, res: Response) => {
+    const skills_user_id = req.params.skills_user_id
+
+    const role = req.user?.role
+
+    if (role !== 'user') {
+        res.status(401).send({ msg: 'No access to account' })
+    }
+
+    return checkIfExists("skills_user", "skills_user_id", Number(skills_user_id)).then((result) => {
+        if (!result) {
+            return res.status(404).send({ msg: "User or Skill not found" });
+        } else {
+            return deleteId(Number(skills_user_id)).then(() => {
+                return res.status(204).send();
+            });
+        }
+    })
+};
+
