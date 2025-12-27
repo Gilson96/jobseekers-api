@@ -79,6 +79,7 @@ describe("GET /api/users/:user_id", () => {
             .expect(200)
             .then(({ body }) => {
                 const { user }: { user: User } = body;
+                console.log(user)
                 expect(user).toHaveProperty("user_id");
                 expect(user).toHaveProperty("name");
                 expect(user).toHaveProperty("email");

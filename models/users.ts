@@ -22,7 +22,11 @@ export const findOne = (user_id?: number, email?: string) => {
     } else {
         return db
             .query(`SELECT users.*,
-                ARRAY_AGG(DISTINCT skills.skills_name) AS skills,
+                ARRAY_AGG(DISTINCT jsonb_build_object(
+                'skills_user_id', skills_user.skills_user_id,
+                'skills_name', skills.skills_name,
+                'skills_id', skills.skills_id
+                )) AS skills,
                 ARRAY_AGG(DISTINCT jsonb_build_object( 
                 'job_id',job.job_id, 
                 'title', job.title,
