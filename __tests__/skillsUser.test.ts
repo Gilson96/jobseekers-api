@@ -88,7 +88,7 @@ describe.only("DELETE /api/user/skills_user", () => {
                 token = body.body.token
             }).then(() => {
                 return request(app)
-                    .delete('/api/user/skills_user/1')
+                    .delete('/api/user/skills_user/2')
                     .auth(token, { type: 'bearer' })
                     .send(newskillsuser)
                     .expect(204)

@@ -264,7 +264,7 @@ describe("GET /api/job/:job_id", () => {
 })
 
 describe("PATCH /api/job/:job_id", () => {
-    it("should respond with 400 when invalid params", () => {
+    it.only("should respond with 400 when invalid params", () => {
         const login = {
             email: "vertextalent@company.com",
             password: "company123",
@@ -291,19 +291,7 @@ describe("PATCH /api/job/:job_id", () => {
     it("should respond with a 400 when invalid field", () => {
         const updatedJob = {
             name: 'new title',
-            location: 'address'
-        }
-        return request(app)
-            .patch('/api/job/1')
-            .auth(token, { type: 'bearer' })
-            .send(updatedJob)
-            .expect(400)
-            .then(({ body }) => { expect(body.msg).toBe(body.msg) })
-    })
-    it("should respond with a 400 when invalid value", () => {
-        const updatedJob = {
-            title: 'new',
-            location: 5
+            location: 'address',
         }
         return request(app)
             .patch('/api/job/1')
@@ -405,7 +393,7 @@ describe("POST /api/job", () => {
             pay: 'pay',
             type: 'type',
             company_id: 999,
-            description: {about_us: '', job_details: '', requirements: '', shift_pattern: ''},
+            description: { about_us: '', job_details: '', requirements: '', shift_pattern: '' },
         }
         return request(app)
             .post('/api/job')

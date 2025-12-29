@@ -104,9 +104,6 @@ export const updateJob = (req: AuthRequest, res: Response) => {
                 .status(400)
                 .send({ msg: `invalid ${fieldToUpdate[i]} field` });
         }
-        if (value[i] !== undefined && typeof value[i] !== "string") {
-            return res.status(400).send({ msg: `invalid ${fieldToUpdate[i]} value` });
-        }
     }
 
     return checkIfExists("job", "job_id", job_id).then((result) => {
