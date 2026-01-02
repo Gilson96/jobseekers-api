@@ -15,10 +15,7 @@ export const createApplication = (req: Request, res: Response) => {
         return res.status(400).send({ msg: "Invalid value" });
     }
 
-    return Promise.all([
-        checkIfExists("job", "job_id", job_id),
-        checkIfExists("users", "user_id", user_id),
-    ]).then((results) => {
+    return checkIfExists("job", "job_id", job_id).then((results) => {
         if (!results) {
             return res.status(404).send({ msg: "Job or User not found!" });
         } else {
