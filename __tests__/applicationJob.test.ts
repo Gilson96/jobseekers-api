@@ -118,7 +118,9 @@ describe("POST /api/jobs/application_job", () => {
         const newApplicationJob = {
             application_id: 1,
             job_id: 1,
-            guest_name: 'Fi'
+            guest_name: 'Fi',
+            guest_email: 'fefa',
+            guest_cv:'fe'
         }
         const newapplication = {
             job_id: 1,

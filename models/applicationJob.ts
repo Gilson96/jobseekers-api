@@ -1,11 +1,11 @@
 import db from "../data/connection.js";
 import type { Application_job } from "../types/index.js";
 
-export const create = (application_id: number, job_id: number, guest_email: string, guest_name: string) => {
+export const create = (application_id: number, job_id: number, guest_email: string, guest_name: string, guest_cv:string) => {
     return db
         .query(
-            `INSERT INTO application_job (application_id, job_id, guest_name, guest_email) VALUES($1, $2, $3, $4) RETURNING *;`,
-            [application_id, job_id, guest_name, guest_email]
+            `INSERT INTO application_job (application_id, job_id, guest_name, guest_email, guest_cv) VALUES($1, $2, $3, $4, $5) RETURNING *;`,
+            [application_id, job_id, guest_name, guest_email, guest_cv]
         )
         .then(({ rows }: { rows: Application_job[] }) => {
             return rows;

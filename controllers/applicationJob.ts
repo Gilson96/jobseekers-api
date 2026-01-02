@@ -9,6 +9,7 @@ export const createApplicationJob = (req: Request, res: Response) => {
     const { job_id }: { job_id: number } = req.body;
     const { guest_name }: { guest_name: string } = req.body;
     const { guest_email }: { guest_email: string } = req.body;
+    const { guest_cv }: { guest_cv: string } = req.body;
 
     if (application_id === undefined || job_id === undefined) {
         return res.status(400).send({ msg: "Invalid field" });
@@ -25,7 +26,7 @@ export const createApplicationJob = (req: Request, res: Response) => {
         if (!results) {
             return res.status(404).send({ msg: "Application or job not found!" });
         } else {
-            return create(application_id, job_id, guest_name, guest_email).then((application_job: Application_job[]) => {
+            return create(application_id, job_id, guest_name, guest_email, guest_cv).then((application_job: Application_job[]) => {
                 return res.status(201).send({ application_job: application_job[0] });
             });
         }

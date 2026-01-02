@@ -75,6 +75,7 @@ export const createTables = () => {
       application_job_id SERIAL PRIMARY KEY,
       guest_name VARCHAR(255),
       guest_email VARCHAR(255),
+      guest_cv VARCHAR(255),
       application_id INTEGER REFERENCES application(application_id) ON DELETE CASCADE,
       job_id INTEGER REFERENCES job(job_id) ON DELETE CASCADE
       );`);
