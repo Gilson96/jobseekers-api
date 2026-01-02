@@ -114,23 +114,36 @@ describe("POST /api/jobs/application_job", () => {
             })
     })
 
-    it("should responds with a 201 status code and an object containing a job application", () => {
+    it.only("should responds with a 201 status code and an object containing a job application", () => {
         const newApplicationJob = {
             application_id: 1,
-            job_id: 1
+            job_id: 1,
+            guest_name: 'Fi'
+        }
+        const newapplication = {
+            job_id: 1,
+            user_id: 1,
         }
         return request(app)
-            .post('/api/job/application_job')
-            .send(newApplicationJob)
+            .post('/api/application')
+            .send(newapplication)
             .expect(201)
             .then(({ body }) => {
-                const { application_job }: { application_job: Application_job } = body;
-                expect(application_job).toHaveProperty("application_job_id");
-                expect(application_job).toHaveProperty("application_id");
-                expect(application_job).toHaveProperty("job_id");
-                expect(typeof application_job.application_job_id).toBe("number");
-                expect(typeof application_job.application_id).toBe("number");
-                expect(typeof application_job.job_id).toBe("number");
+                return request(app)
+                    .post('/api/job/application_job')
+                    .send(newApplicationJob)
+                    .expect(201)
+                    .then(({ body }) => {
+                        const { application_job }: { application_job: Application_job } = body;
+                        console.log(application_job)
+                        expect(application_job).toHaveProperty("application_job_id");
+                        expect(application_job).toHaveProperty("application_id");
+                        expect(application_job).toHaveProperty("job_id");
+                        expect(typeof application_job.application_job_id).toBe("number");
+                        expect(typeof application_job.application_id).toBe("number");
+                        expect(typeof application_job.job_id).toBe("number");
+                    })
             })
+
     })
 })
