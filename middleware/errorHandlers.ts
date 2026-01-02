@@ -19,5 +19,5 @@ export const handleCustomError = (err: ErrorHandler, req: Request, res: Response
 
 export const handleSeverError = (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
     console.log(err);
-    res.status(500).send({ msg: "Somenthing went wrong!" });
+    res.status(500).send({ msg: "Somenthing went wrong!", err });
 };
