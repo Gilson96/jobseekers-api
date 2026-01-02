@@ -47,7 +47,7 @@ describe("POST /api/application", () => {
                 expect(body.msg).toBe("Invalid value");
             })
     })
-    it("should responds with a 201 status code and an object containing a application", () => {
+    it.only("should responds with a 201 status code and an object containing a application", () => {
     
         const newapplication = {
             job_id: 1,

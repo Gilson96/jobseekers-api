@@ -33,12 +33,12 @@ export const createTables = () => {
     .then(() => {
       return db.query(`CREATE TABLE users (
           user_id SERIAL PRIMARY KEY,
-          name VARCHAR(255) NOT NULL,
-          email VARCHAR(255) NOT NULL UNIQUE,
+          name VARCHAR(255),
+          email VARCHAR(255) UNIQUE,
           password VARCHAR(255),
-          number VARCHAR(255) NOT NULL,
-          address VARCHAR(255) NOT NULL,
-          cv TEXT NOT NULL,
+          number VARCHAR(255),
+          address VARCHAR(255),
+          cv TEXT,
           role VARCHAR(10) DEFAULT 'user' NOT NULL
       );`);
     })
