@@ -229,7 +229,7 @@ describe("GET /api/job/:job_id", () => {
                 expect(body.msg).toBe("Job not found");
             })
     })
-    it("should respond with 200 and an object containing a job", () => {
+    it.only("should respond with 200 and an object containing a job", () => {
         return request(app)
             .get('/api/job/1')
             .expect(200)
@@ -264,7 +264,7 @@ describe("GET /api/job/:job_id", () => {
 })
 
 describe("PATCH /api/job/:job_id", () => {
-    it.only("should respond with 400 when invalid params", () => {
+    it("should respond with 400 when invalid params", () => {
         const login = {
             email: "vertextalent@company.com",
             password: "company123",

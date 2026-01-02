@@ -27,7 +27,11 @@ export const findAll = () => {
 export const findId = (job_id: number) => {
     return db
         .query(`SELECT job.*, company_name,
-        ARRAY_AGG(DISTINCT skills.skills_name) AS skills
+        ARRAY_AGG(DISTINCT jsonb_build_object(
+        'skills_job_id', skills_job.skills_job_id,
+        'skills_name', skills.skills_name,
+        'skills_id', skills.skills_id
+        )) AS skills
         FROM job
         LEFT JOIN company ON job.company_id = company.company_id
         LEFT JOIN skills_job ON skills_job.job_id = job.job_id
