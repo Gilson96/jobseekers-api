@@ -70,7 +70,7 @@ describe("POST /api/user/skills_user", () => {
     })
 })
 
-describe.only("DELETE /api/user/skills_user", () => {
+describe("DELETE /api/user/skills_user", () => {
     it("should responds with a 204 status code and an object containing a user skills", () => {
         const newskillsuser = {
             skills_id: 1,

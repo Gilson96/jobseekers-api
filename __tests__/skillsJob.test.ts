@@ -14,6 +14,8 @@ afterAll(() => {
     return db.end();
 });
 
+let token: string
+
 describe("checks if attempting to access a non-existent endpoint", () => {
     it("should respond with a 404 status code for invalid endpoint", () => {
         return request(app).get("/api/not-valid").expect(404)
@@ -66,6 +68,33 @@ describe("POST /api/job/skills_job", () => {
                 expect(typeof skills_job.skills_job_id).toBe("number");
                 expect(typeof skills_job.skills_id).toBe("number");
                 expect(typeof skills_job.job_id).toBe("number");
+            })
+    })
+})
+
+describe.only("DELETE /api/job/skills_job", () => {
+    it("should responds with a 204 status code and an object containing a job skills", () => {
+        const newskillsJob = {
+            skills_id: 1,
+            job_id: 1
+        }
+        const login = {
+            email: "talentbridge@company.com",
+            password: "company123",
+        }
+        return request(app)
+            .post('/api/login')
+            .send(login)
+            .expect(200)
+            .then((body) => {
+                token = body.body.token
+            }).then(() => {
+                return request(app)
+                    .delete('/api/job/skills_job/1')
+                    .auth(token, { type: 'bearer' })
+                    .send(newskillsJob)
+                    .expect(204)
+                    .then(() => { })
             })
     })
 })
