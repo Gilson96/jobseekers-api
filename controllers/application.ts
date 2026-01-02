@@ -17,7 +17,7 @@ export const createApplication = (req: Request, res: Response) => {
 
     return checkIfExists("job", "job_id", job_id).then((results) => {
         if (!results) {
-            return res.status(404).send({ msg: "Job or User not found!" });
+            return res.status(404).send({ msg: "Job not found!" });
         } else {
             return create(job_id, user_id).then((application: Application[]) => {
                 return res.status(201).send({ application: application[0] });
