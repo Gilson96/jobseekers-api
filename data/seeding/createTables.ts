@@ -53,7 +53,9 @@ export const createTables = () => {
       return db.query(`CREATE TABLE skills_job (
       skills_job_id SERIAL PRIMARY KEY,
       job_id INTEGER REFERENCES job(job_id) ON DELETE CASCADE,
-      skills_id INTEGER REFERENCES skills(skills_id) ON DELETE CASCADE
+      skills_id INTEGER REFERENCES skills(skills_id) ON DELETE CASCADE,
+      CONSTRAINT skills_job_unique
+      UNIQUE (job_id, skills_id)
       );`);
     })
     .then(() => {

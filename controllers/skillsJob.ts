@@ -23,10 +23,14 @@ export const createSkillsJob = (req: Request, res: Response) => {
             return res.status(404).send({ msg: "Skills or job not found!" });
         } else {
             return create(skills_id, job_id).then((skills_job: Skills_job[]) => {
-                return res.status(201).send({ skills_job: skills_job[0] });
+                if (skills_job.length > 0) {
+                    return res.status(201).send({ skills_job: skills_job[0] });
+                } else {
+                    return res.status(400).send({ msg: "Skill already exists" })
+                }
             });
         }
-    });
+    })
 };
 
 export const deleteSkillsJob = (req: AuthRequest, res: Response) => {
