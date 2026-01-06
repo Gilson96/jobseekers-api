@@ -1,9 +1,11 @@
-import * as fs from 'fs';
-import * as path from "path";
-
-const filePath = path.join(import.meta.dirname, "../assets", "Rob_Thompson_CV_v2.pdf");
-
-export const users = [
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.users = void 0;
+var fs = require("fs");
+var path = require("path");
+var filePath = path.join("../assets", "Rob_Thompson_CV_v2.pdf");
+console.log('filePath');
+exports.users = [
     {
         name: "",
         email: "",

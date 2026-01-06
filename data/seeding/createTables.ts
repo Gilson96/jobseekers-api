@@ -38,7 +38,7 @@ export const createTables = () => {
           password VARCHAR(255),
           number VARCHAR(255),
           address VARCHAR(255),
-          cv TEXT,
+          cv BYTEA,
           role VARCHAR(10) DEFAULT 'user' NOT NULL
       );`);
     })
