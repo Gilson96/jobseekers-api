@@ -14,7 +14,7 @@ export const users = [
         password: "user123",
         number: "+44 7480 223 615",
         address: "Chorlton, Manchester M21 8AZ, UK",
-        cv: "",
+        cv: "https://drive.google.com/drive/folders/1deBm2JpNSkXZZRNQJF_VrRTbkv3dPCvi",
         role: "user"
     },
 ];
