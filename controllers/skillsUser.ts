@@ -23,7 +23,11 @@ export const createSkillsUser = (req: Request, res: Response) => {
             return res.status(404).send({ msg: "Skills or User not found!" });
         } else {
             return create(skills_id, user_id).then((skills_user: Skills_user[]) => {
-                return res.status(201).send({ skills_user: skills_user[0] });
+                if (skills_user.length > 0) {
+                    return res.status(201).send({ skills_user: skills_user[0] });
+                } else {
+                    return res.status(400).send({ msg: "Skill already exists" })
+                }
             });
         }
     });

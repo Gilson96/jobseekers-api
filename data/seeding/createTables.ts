@@ -46,7 +46,9 @@ export const createTables = () => {
       return db.query(`CREATE TABLE skills_user(
       skills_user_id SERIAL PRIMARY KEY,
       user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-      skills_id INTEGER REFERENCES skills(skills_id) ON DELETE CASCADE
+      skills_id INTEGER REFERENCES skills(skills_id) ON DELETE CASCADE,
+      CONSTRAINT skills_user_unique
+      UNIQUE (user_id, skills_id)
       );`);
     })
     .then(() => {
