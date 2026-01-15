@@ -9,7 +9,7 @@ An API with RESTful routes, authentication for the Jobseekers full-stack applica
 - **Node.js**
 - **Express.js**
 - **PostgreSQL**
-- **Typescript**
+- **TypeScript**
 - **JWT authentication**
 - **Vitest**
 - **Supertest**
@@ -52,6 +52,36 @@ PGDATABASE=jobseekers_api_test
 
 ---
 
+## 🗂 API Endpoints
+
+### Public
+- POST /api/login
+- GET /api/job
+- GET /api/job/:job_id
+- GET /api/search
+- GET /api/skills
+
+### Authenticated Users
+- GET /api/users/:user_id
+- PATCH /api/users/:user_id
+- DELETE /api/users/:user_id
+- POST /api/applications
+- GET /api/saved_job/:user_id
+- POST /api/saved_job
+- DELETE /api/saved_job/:saved_job_id
+
+### Admin
+- POST /api/job
+- PATCH /api/job/:job_id
+- DELETE /api/job/:job_id
+- POST /api/skills
+- POST /api/company
+- GET /api/company/:company_id
+- PATCH /api/company/:company_id
+- DELETE /api/company/:company_id
+
+---
+
 ## ▶️ How to Run Locally
 
 ```bash
@@ -75,7 +105,7 @@ npm run dev
 
 ---
 
-## 🧪 How to Run tests
+## 🧪 How to Run Tests
 
 - ⚠️ Important: Each test file has its own seeding, so it’s recommended to run one file at a time to avoid conflicts.
 -  Run a specific test file:
@@ -89,6 +119,6 @@ npm test __tests__/filename.test.ts
 
 👤 GitHub: @Gilson96
 
-💼 LinkedIn: www.linkedin.com/in/gilson-de-almeida
+💼 LinkedIn: [www.linkedin.com/in/gilson-de-almeida](https://www.linkedin.com/in/gilson-de-almeida)
 
 📧 Email: grafael99@gmail.com
