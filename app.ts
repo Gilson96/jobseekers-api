@@ -23,7 +23,7 @@ const apiRouter = express.Router()
 
 app.use("/api", apiRouter)
 
-// apiRouter.use("/login", login)
+apiRouter.use("/login", login)
 apiRouter.use("/job", jobRouter)
 apiRouter.use("/skills", skillsRouter)
 apiRouter.use("/application", applicationRouter)
